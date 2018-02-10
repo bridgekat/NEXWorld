@@ -37,7 +37,7 @@ public:
 		}
 	}
 
-	static Window& getInstance(const std::string& title="", int width=0, int height=0) {
+	static Window& getInstance(const std::string& title = "", int width = 0, int height = 0) {
 		static Window win(title, width, height);
 		return win;
 	}

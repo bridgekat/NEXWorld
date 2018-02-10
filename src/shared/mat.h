@@ -26,7 +26,7 @@ public:
 template <typename T>
 class Mat4 {
 public:
-	static constexpr double PI = 3.1415926535897932;
+	static constexpr double Pi = 3.1415926535897932;
 
 	T data[16];
 
@@ -137,32 +137,61 @@ public:
 	// Inverse matrix
 	Mat4& inverse() {
 		Mat4 res(T(1));
-		for(int i=0; i<4; i++) {
-			int p=i;
-			for(int j=i+1; j<4; j++)if(data[j*4+i]!=T(0))p=j;
-			res.swapRows(i,p);
-			swapRows(i,p);
-			res.multRow(i,T(1)/data[i*4+i]);
-			multRow(i,T(1)/data[i*4+i]);
-			for(int j=i+1; j<4; j++) {
-				res.multAndAdd(i,j,-data[j*4+i]);
-				multAndAdd(i,j,-data[j*4+i]);
+		for (int i = 0; i < 4; i++) {
+			int p = i;
+			for (int j = i + 1; j < 4; j++) {
+				if (abs(data[j * 4 + i]) > abs(data[p * 4 + i])) p = j;
+			}
+			res.swapRows(i, p);
+			swapRows(i, p);
+			res.multRow(i, T(1) / data[i * 4 + i]);
+			multRow(i, T(1) / data[i * 4 + i]);
+			for (int j = i + 1; j < 4; j++) {
+				res.multAndAdd(i, j, -data[j * 4 + i]);
+				multAndAdd(i, j, -data[j * 4 + i]);
 			}
 		}
-		for(int i=3; i>=0; i--) {
-			for(int j=0; j<i; j++) {
-				res.multAndAdd(i,j,-data[j*4+i]);
-				multAndAdd(i,j,-data[j*4+i]);
+		for (int i = 3; i >= 0; i--) {
+			for (int j = 0; j < i; j++) {
+				res.multAndAdd(i, j, -data[j * 4 + i]);
+				multAndAdd(i, j, -data[j * 4 + i]);
 			}
 		}
-		(*this)=res;
+		(*this) = res;
 		return *this;
+	}
+
+	// Construct a translation matrix
+	static Mat4 translation(const Vec3<T>& delta) {
+		Mat4 res(T(1.0));
+		res.data[3] = delta.x;
+		res.data[7] = delta.y;
+		res.data[11] = delta.z;
+		return res;
+	}
+
+	// Construct a rotation matrix
+	static Mat4 rotation(T degrees, Vec3<T> vec) {
+		Mat4 res;
+		vec.normalize();
+		T alpha = degrees * T(Pi) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
+		res.data[0] = t * vec.x * vec.x + c;
+		res.data[1] = t * vec.x * vec.y + s * vec.z;
+		res.data[2] = t * vec.x * vec.z - s * vec.y;
+		res.data[4] = t * vec.x * vec.y - s * vec.z;
+		res.data[5] = t * vec.y * vec.y + c;
+		res.data[6] = t * vec.y * vec.z + s * vec.x;
+		res.data[8] = t * vec.x * vec.z + s * vec.y;
+		res.data[9] = t * vec.y * vec.z - s * vec.x;
+		res.data[10] = t * vec.z * vec.z + c;
+		res.data[15] = T(1.0);
+		return res;
 	}
 
 	// Construct a perspective projection matrix
 	static Mat4 perspective(T fov, T aspect, T zNear, T zFar) {
 		Mat4 res;
-		T f = T(1) / tan(fov * T(PI) / T(180) / T(2));
+		T f = T(1) / tan(fov * T(Pi) / T(180) / T(2));
 		T a = zNear - zFar;
 		res.data[0] = f / aspect;
 		res.data[5] = f;

@@ -2,15 +2,22 @@
 #include <sstream>
 
 int Renderer::matrixMode = 0;
+Mat4f Renderer::mProjection(1.0f), Renderer::mModelview(1.0f);
 
 void Renderer::init() {
 	if (glewInit() != GLEW_OK) LogFatal("Failed to initialize GLEW!");
+
 	glShadeModel(GL_SMOOTH);
 	glDisable(GL_DITHER);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-	glClearDepth(1.0f);
+
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+
+	setClearColor(Vec3f(0.0f, 0.0f, 0.0f));
+	setClearDepth(1.0f);
+	clear();
+
+	enableDepthTest();
 }
 
 void Renderer::checkError() {

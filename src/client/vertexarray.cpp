@@ -10,7 +10,7 @@ void VertexBuffer::update(const VertexArray& va) {
 					va.getData(), GL_STATIC_DRAW_ARB);
 }
 
-VertexBuffer::VertexBuffer(const VertexArray& va) :vertexes(va.getVertexCount()), format(va.getFormat()) {
+VertexBuffer::VertexBuffer(const VertexArray& va) : vertexes(va.getVertexCount()), format(va.getFormat()) {
 	glGenBuffersARB(1, &id);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.getVertexCount() * sizeof(float) *
@@ -53,7 +53,7 @@ void VertexBuffer::render() const {
 		);
 	}
 
-	glDrawArrays(GL_QUADS, 0, vertexes);
+	glDrawArrays(GL_TRIANGLES, 0, vertexes);
 
 	if (format.textureCount != 0) glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	if (format.colorCount != 0) glDisableClientState(GL_COLOR_ARRAY);

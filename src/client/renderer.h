@@ -9,48 +9,54 @@
 
 class Renderer {
 public:
-	// Setup rendering
+	// Set up rendering. Must be called after OpenGL context is available!
 	static void init();
 
 	static void setViewport(int x, int y, int width, int height) {
 		glViewport(x, y, width, height);
 	}
 
-	// Reset translations/rotations (Restore transform matrixes)
-	static void restoreScale() {
-		setModelMatrix();
-		glLoadIdentity();
-	}
-
-	// Apply translation
 	static void translate(const Vec3f& delta) {
-		setModelMatrix();
-		glTranslatef(delta.x, delta.y, delta.z);
+		mModelview = Mat4f::translation(delta) * mModelview;
+		updateMatrices();
 	}
 
-	// Apply rotation
 	static void rotate(float degrees, const Vec3f& scale) {
-		setModelMatrix();
-		glRotatef(degrees, scale.x, scale.y, scale.z);
+		mModelview = Mat4f::rotation(degrees, scale) * mModelview;
+		updateMatrices();
 	}
 
-	// Restore projection matrix
 	static void restoreProj() {
-		setProjMatrix();
-		glLoadIdentity();
+		mProjection = Mat4f(1.0f);
+		updateMatrices();
 	}
 
-	// Perspective projection
+	static void restoreModl() {
+		mModelview = Mat4f(1.0f);
+		updateMatrices();
+	}
+
 	static void applyPerspective(float fov, float aspect, float zNear, float zFar) {
-		setProjMatrix();
-		glMultMatrixf(Mat4f::perspective(fov, aspect, zNear, zFar).getTranspose().data);
+		mProjection = Mat4f::perspective(fov, aspect, zNear, zFar) * mProjection;
+		updateMatrices();
 	}
 
-	// Orthogonal projection
 	static void applyOrtho(float left, float right, float top, float bottom, float zNear, float zFar) {
-		setProjMatrix();
-		glMultMatrixf(Mat4f::ortho(left, right, top, bottom, zNear, zFar).getTranspose().data);
+		mModelview = Mat4f::ortho(left, right, top, bottom, zNear, zFar) * mModelview;
+		updateMatrices();
 	}
+
+	static void enableTexture2D() { glEnable(GL_TEXTURE_2D); }
+	static void disableTexture2D() { glDisable(GL_TEXTURE_2D); }
+
+	static void enableDepthOverwrite() { glDepthFunc(GL_ALWAYS); }
+	static void disableDepthOverwrite() { glDepthFunc(GL_LEQUAL); }
+
+	static void enableDepthTest() { glEnable(GL_DEPTH_TEST); }
+	static void disableDepthTest() { glDisable(GL_DEPTH_TEST); }
+
+	static void setClearColor(const Vec3f& col, float alpha = 0.0f) { glClearColor(col.x, col.y, col.z, alpha); }
+	static void setClearDepth(float depth) { glClearDepth(1.0f); }
 
 	static void clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
 	static void flush() { glFlush(); }
@@ -59,17 +65,13 @@ public:
 
 private:
 	static int matrixMode;
+	static Mat4f mProjection, mModelview;
 
-	static void setProjMatrix() {
-		if (matrixMode == GL_PROJECTION) return;
+	static void updateMatrices() {
 		glMatrixMode(GL_PROJECTION);
-		matrixMode = GL_PROJECTION;
-	}
-
-	static void setModelMatrix() {
-		if (matrixMode == GL_MODELVIEW) return;
+		glLoadMatrixf(mProjection.getTranspose().data);
 		glMatrixMode(GL_MODELVIEW);
-		matrixMode = GL_MODELVIEW;
+		glLoadMatrixf(mModelview.getTranspose().data);
 	}
 };
 
