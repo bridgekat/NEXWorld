@@ -1,0 +1,12 @@
+# Ignore files for convenience. Use `git add -f <files>` to include necessary files.
+
+# Dependencies
+include/
+lib/
+
+# Build files
+build/
+
+# Release directory
+release/
+
