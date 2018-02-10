@@ -3,7 +3,11 @@
 
 #include <cassert>
 
-inline void Assert(bool expr) { assert(expr); }
+inline void Assert(bool expr) {
+	if (expr) return;
+	// Add a breakpoint here?
+	assert(false);
+}
 
 #undef assert
 
