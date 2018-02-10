@@ -1,7 +1,7 @@
 // Placeholder!
 
-#include <iostream>
+#include "logger.h"
 
 void helloworld() {
-	std::cout << "Hello world from shared.lib!" << std::endl;
+	LogVerbose("Hello world from shared.lib!");
 }

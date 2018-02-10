@@ -5,8 +5,6 @@ int Renderer::matrixMode = 0;
 Mat4f Renderer::mProjection(1.0f), Renderer::mModelview(1.0f);
 
 void Renderer::init() {
-	if (glewInit() != GLEW_OK) LogFatal("Failed to initialize GLEW!");
-
 	glShadeModel(GL_SMOOTH);
 	glDisable(GL_DITHER);
 

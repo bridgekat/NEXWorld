@@ -1,21 +1,22 @@
 #include "vertexarray.h"
 
-void VertexBuffer::update(const VertexArray& va) {
+void VertexBuffer::update(const VertexArray& va, bool staticDraw) {
 	vertexes = va.getVertexCount();
 	format = va.getFormat();
 	if (id == 0) glGenBuffersARB(1, &id);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.getVertexCount() * sizeof(float) *
 					format.vertexAttributeCount,
-					va.getData(), GL_STATIC_DRAW_ARB);
+					va.getData(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
 }
 
-VertexBuffer::VertexBuffer(const VertexArray& va) : vertexes(va.getVertexCount()), format(va.getFormat()) {
+VertexBuffer::VertexBuffer(const VertexArray& va, bool staticDraw):
+	vertexes(va.getVertexCount()), format(va.getFormat()) {
 	glGenBuffersARB(1, &id);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.getVertexCount() * sizeof(float) *
 					format.vertexAttributeCount,
-					va.getData(), GL_STATIC_DRAW_ARB);
+					va.getData(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
 }
 
 void VertexBuffer::render() const {

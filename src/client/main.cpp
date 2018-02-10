@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "window.h"
 #include "renderer.h"
 #include <main.h>
@@ -8,7 +6,7 @@ class orld {
 public:
 	orld() {
 		// Meaningless helloworld
-		std::cout << "Hello world" << std::endl;
+		LogVerbose("Hello world from client!");
 		helloworld();
 
 		// Test window
@@ -38,7 +36,7 @@ public:
 			va.addVertex({ 1.0f, 1.0f, 0.0f });
 			va.addVertex({ -1.0f, 1.0f, 0.0f });
 
-			VertexBuffer vb(va);
+			VertexBuffer vb(va, false);
 
 			vb.render();
 

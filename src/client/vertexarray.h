@@ -129,10 +129,10 @@ public:
 	VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
 		id(id_), vertexes(vertexes_), format(format_) {}
 
-	explicit VertexBuffer(const VertexArray& va);
+	explicit VertexBuffer(const VertexArray& va, bool staticDraw = true);
 
 	// upload new data
-	void update(const VertexArray& va);
+	void update(const VertexArray& va, bool staticDraw = true);
 
 	// Render vertex buffer
 	void render() const;
