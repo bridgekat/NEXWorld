@@ -3,7 +3,6 @@
 
 #include <string>
 #include <SDL2/SDL.h>
-#include "imguihelper.h"
 
 class Window
 {
@@ -41,7 +40,6 @@ public:
         SDL_Event e;
         while (SDL_PollEvent(&e))
         {
-            imguiHelper::processEvent(&e);
             switch (e.type)
             {
             case SDL_QUIT:
@@ -70,11 +68,6 @@ public:
     bool shouldQuit() const
     {
         return mShouldQuit;
-    }
-
-    void newIMGUIFrame() const
-    {
-        imguiHelper::newFrame(mWindow);
     }
 
 private:

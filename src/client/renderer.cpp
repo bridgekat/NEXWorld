@@ -4,8 +4,7 @@ int Renderer::matrixMode = 0;
 
 void Renderer::init()
 {
-    if (glewInit() != GLEW_OK)
-        fatalstream << "Failed to initialize GLEW!";
+	if (glewInit() != GLEW_OK) LogFatal("Failed to initialize GLEW!");
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DITHER);
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);

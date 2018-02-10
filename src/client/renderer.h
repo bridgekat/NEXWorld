@@ -1,6 +1,7 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
+#include <logger.h>
 #include "opengl.h"
 #include <vec3.h>
 #include "mat4.h"
