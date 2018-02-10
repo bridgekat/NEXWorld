@@ -1,12 +1,17 @@
 # Ignore files for convenience. Use `git add -f <files>` to include necessary files.
 
 # Dependencies
-include/
-lib/
+include/*
+lib/*
 
 # Build files
-build/
+build/**/.vs
+build/**/*.user
+build/**/Debug
+build/**/Release
+build/**/Win32
+build/**/x64
 
 # Release directory
-release/
+release/*
 
