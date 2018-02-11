@@ -59,11 +59,11 @@ public:
 		return false;
 	}
 
-
 	Vec3 operator+ (const Vec3& r) const { return Vec3(x + r.x, y + r.y, z + r.z); }
 	Vec3 operator- (const Vec3& r) const { return Vec3(x - r.x, y - r.y, z - r.z); }
-	Vec3 operator* (const Vec3& r) const { return Vec3(x * r.x, y * r.y, z * r.z); }
-	Vec3 operator/ (const Vec3& r) const { return Vec3(x / r.x, y / r.y, z / r.z); }
+	Vec3 operator* (T r) const { return Vec3(x * r, y * r, z * r); }
+	Vec3 operator/ (T r) const { return Vec3(x / r, y / r, z / r); }
+
 	friend Vec3 operator- (const Vec3& vec) { return Vec3(-vec.x, -vec.y, -vec.z); }
 	bool operator== (const Vec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
 	bool operator!= (const Vec3& rhs) const { return !(rhs == *this); }

@@ -1,6 +1,7 @@
+#include <main.h>
 #include "window.h"
 #include "renderer.h"
-#include <main.h>
+#include "gui.h"
 
 class orld {
 public:
@@ -13,6 +14,15 @@ public:
 		Window& win = Window::getInstance("Test", 852, 480);
 
 		Renderer::init();
+
+		GUI::Form form;
+		GUI::Area area(GUI::Position(GUI::Point2D(0.5f, 0.0f), GUI::Point2D(-250, 0)), GUI::Position(GUI::Point2D(0.5f, 1.0f), GUI::Point2D(+250, 0)));
+		GUI::Button button0(GUI::Position(GUI::Point2D(0.0f, 0.0f), GUI::Point2D(+40, +40)), GUI::Position(GUI::Point2D(1.0f, 0.0f), GUI::Point2D(-40, +240)));
+		GUI::Button button1(GUI::Position(GUI::Point2D(0.0f, 0.0f), GUI::Point2D(+20, +300)), GUI::Position(GUI::Point2D(1.0f, 0.0f), GUI::Point2D(-20, +350)));
+		GUI::Button button2(GUI::Position(GUI::Point2D(0.0f, 0.0f), GUI::Point2D(+20, +360)), GUI::Position(GUI::Point2D(0.5f, 0.0f), GUI::Point2D(-5, +410)));
+		GUI::Button button3(GUI::Position(GUI::Point2D(0.5f, 0.0f), GUI::Point2D(+5, +360)), GUI::Position(GUI::Point2D(1.0f, 0.0f), GUI::Point2D(-20, +410)));
+		form.addChild(&area);
+		area.addChild({ &button0, &button1, &button2, &button3 });
 
 		int cnt = 0;
 
@@ -44,6 +54,15 @@ public:
 			VertexBuffer vb(va, false);
 
 			vb.render();
+
+			Renderer::restoreProj();
+			Renderer::restoreModl();
+			Renderer::applyOrtho(0.0f, float(win.getWidth()), 0.0f, float(win.getHeight()), -1.0f, 1.0f);
+			Renderer::enableDepthOverwrite();
+
+			form.render(GUI::Point2D(win.getWidth(), win.getHeight()), GUI::Point2D(0, 0));
+
+			Renderer::disableDepthOverwrite();
 
 			win.pollEvents();
 
