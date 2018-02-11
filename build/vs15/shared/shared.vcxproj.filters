@@ -20,6 +20,12 @@
     <Filter Include="Source Files\Game\Block">
       <UniqueIdentifier>{c94301ed-7cf1-4b39-920b-3df628a87497}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Network">
+      <UniqueIdentifier>{57d50845-c71b-4c75-8cd7-8655137ab5ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Data">
+      <UniqueIdentifier>{a6c83e47-258f-4270-b2b8-054cc2a658ff}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\shared\common.h">

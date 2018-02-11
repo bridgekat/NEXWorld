@@ -1,25 +1,26 @@
 #include "vertexarray.h"
 
 void VertexBuffer::update(const VertexArray& va, bool staticDraw) {
-	vertexes = va.getVertexCount();
-	format = va.getFormat();
+	vertexes = va.vertexCount();
+	format = va.format();
 	if (id == 0) glGenBuffersARB(1, &id);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.getVertexCount() * sizeof(float) *
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.vertexCount() * sizeof(float) *
 					format.vertexAttributeCount,
-					va.getData(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
+					va.data(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
 }
 
 VertexBuffer::VertexBuffer(const VertexArray& va, bool staticDraw):
-	vertexes(va.getVertexCount()), format(va.getFormat()) {
+	vertexes(va.vertexCount()), format(va.format()) {
 	glGenBuffersARB(1, &id);
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.getVertexCount() * sizeof(float) *
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.vertexCount() * sizeof(float) *
 					format.vertexAttributeCount,
-					va.getData(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
+					va.data(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
 }
 
 void VertexBuffer::render() const {
+	// TODO: optimize out glEnableClientState/glDisableClientState
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
 	if (format.textureCount != 0) {
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);

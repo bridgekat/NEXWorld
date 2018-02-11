@@ -34,6 +34,9 @@
     <ClCompile Include="..\..\..\src\client\gui.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp">
+      <Filter>Source Files\WorldRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h">

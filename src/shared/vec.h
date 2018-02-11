@@ -74,6 +74,7 @@ public:
 		std::swap(z, rhs.z);
 	}
 
+	// For each component: begin ~ (end - 1)
 	template <typename Func>
 	static void range(T begin, T end, Func func) {
 		Vec3 a;
@@ -83,6 +84,7 @@ public:
 					func(a);
 	}
 
+	// For each component: begin ~ (end - 1)
 	template <typename Func>
 	static void range(const Vec3& begin, const Vec3& end, Func func) {
 		Vec3 a;

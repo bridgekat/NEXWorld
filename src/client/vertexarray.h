@@ -95,19 +95,11 @@ public:
 	}
 
 	// Get current vertex format
-	const VertexFormat& getFormat() const {
-		return mFormat;
-	}
-
+	const VertexFormat& format() const { return mFormat; }
 	// Get current vertex data
-	const float* getData() const {
-		return mData;
-	}
-
+	const float* data() const { return mData; }
 	// Get current vertex count
-	int getVertexCount() const {
-		return mVertexes;
-	}
+	int vertexCount() const { return mVertexes; }
 
 private:
 	// Max vertex count
@@ -125,22 +117,25 @@ private:
 class VertexBuffer {
 public:
 	VertexBuffer(): id(0), vertexes(0) {}
-
+	VertexBuffer(VertexBuffer&& r): id(r.id), vertexes(r.vertexes), format(r.format) {}
 	VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
 		id(id_), vertexes(vertexes_), format(format_) {}
-
 	explicit VertexBuffer(const VertexArray& va, bool staticDraw = true);
+	~VertexBuffer() { destroy(); }
+	VertexBuffer& operator=(const VertexBuffer& r) = delete;
 
-	// upload new data
+	// Is empty
+	bool empty() const { return id == 0; }
+	// Upload new data
 	void update(const VertexArray& va, bool staticDraw = true);
-
 	// Render vertex buffer
 	void render() const;
-
 	// Destroy vertex buffer
 	void destroy() {
-		glDeleteBuffersARB(1, &id);
-		vertexes = id = 0;
+		if (id != 0) {
+			glDeleteBuffersARB(1, &id);
+			vertexes = id = 0;
+		}
 		format = VertexFormat();
 	}
 
