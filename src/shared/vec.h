@@ -59,10 +59,11 @@ public:
 		return false;
 	}
 
-	Vec3 operator+ (T value) const { return Vec3(x + value, y + value, z + value); }
-	Vec3 operator- (T value) const { return Vec3(x - value, y - value, z - value); }
-	Vec3 operator* (T value) const { return Vec3(x * value, y * value, z * value); }
-	Vec3 operator/ (T value) const { return Vec3(x / value, y / value, z / value); }
+
+	Vec3 operator+ (const Vec3& r) const { return Vec3(x + r.x, y + r.y, z + r.z); }
+	Vec3 operator- (const Vec3& r) const { return Vec3(x - r.x, y - r.y, z - r.z); }
+	Vec3 operator* (const Vec3& r) const { return Vec3(x * r.x, y * r.y, z * r.z); }
+	Vec3 operator/ (const Vec3& r) const { return Vec3(x / r.x, y / r.y, z / r.z); }
 	friend Vec3 operator- (const Vec3& vec) { return Vec3(-vec.x, -vec.y, -vec.z); }
 	bool operator== (const Vec3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
 	bool operator!= (const Vec3& rhs) const { return !(rhs == *this); }
@@ -95,5 +96,18 @@ public:
 using Vec3i = Vec3<int>;
 using Vec3f = Vec3<float>;
 using Vec3d = Vec3<double>;
+
+namespace std {
+	template <>
+	struct hash<Vec3i> {
+		size_t operator()(const Vec3i& s) const {
+			// TODO: optimize 233
+			size_t x = hash<int>()(s.x);
+			size_t y = hash<int>()(s.y);
+			size_t z = hash<int>()(s.z);
+			return hash<long long>()(x * 233ull ^ y * 666ull ^ z * 19260817ull);
+		}
+	};
+}
 
 #endif // !VEC_H_

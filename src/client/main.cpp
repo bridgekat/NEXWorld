@@ -14,6 +14,8 @@ public:
 
 		Renderer::init();
 
+		int cnt = 0;
+
 		while (!win.shouldQuit()) {
 			Renderer::waitForComplete();
 			win.swapBuffers();
@@ -25,6 +27,9 @@ public:
 			Renderer::restoreModl();
 			Renderer::applyPerspective(70.0f, float(win.getWidth()) / float(win.getHeight()), 0.1f, 100.0f);
 			Renderer::translate(Vec3f(0.0f, 0.0f, -5.0f));
+			Renderer::rotate(float(cnt), Vec3f(0.0f, 1.0f, 0.0f));
+
+			Renderer::disableCullFace();
 
 			VertexArray va(6, VertexFormat(0, 3, 0, 3));
 
@@ -41,6 +46,8 @@ public:
 			vb.render();
 
 			win.pollEvents();
+
+			cnt++;
 		}
 	}
 };

@@ -5,6 +5,7 @@
 #	define NEXWORLD_DEBUG
 #endif
 
+// Check if arithmetic shift right is used
 #if ((-1) >> 1) == -1
 #	define NEXWORLD_COMPILER_RSHIFT_ARITH
 #endif

@@ -7,14 +7,16 @@ Mat4f Renderer::mProjection(1.0f), Renderer::mModelview(1.0f);
 void Renderer::init() {
 	glShadeModel(GL_SMOOTH);
 	glDisable(GL_DITHER);
-
-	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);
+	glAlphaFunc(GL_GREATER, 0.01f);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDepthFunc(GL_LEQUAL);
 
 	setClearColor(Vec3f(0.0f, 0.0f, 0.0f));
 	setClearDepth(1.0f);
 	clear();
 
+	enableCullFace();
 	enableDepthTest();
 }
 

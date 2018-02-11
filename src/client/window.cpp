@@ -6,7 +6,7 @@
 #include <common.h>
 
 // OpenGL debug callback
-void GLEWAPIENTRY glDebugCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* msg, const void* data) {
+void GLEWAPIENTRY glDebugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* msg, const void* /*data*/) {
 	if (severity != GL_DEBUG_SEVERITY_NOTIFICATION) {
 		std::stringstream ss("OpenGL debug: ");
 		ss << std::string(msg);
