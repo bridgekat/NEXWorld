@@ -82,6 +82,12 @@
     <ClInclude Include="..\..\..\src\shared\config.h">
       <Filter>Source Files\Config</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\filesystem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\library.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
@@ -89,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\config.cpp">
       <Filter>Source Files\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\filesystem.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
