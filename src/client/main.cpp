@@ -5,6 +5,7 @@
 #include "renderer.h"
 #include "chunkrenderer.h"
 #include "gui.h"
+#include "player.h"
 
 void drawExampleGUI(const Window& win) {
 	GUI::Form form;
@@ -16,8 +17,8 @@ void drawExampleGUI(const Window& win) {
 	form.addChild(&area);
 	area.addChild({ &button0, &button1, &button2, &button3 });
 
-	Renderer::restoreProj();
-	Renderer::restoreModl();
+	Renderer::restoreProjection();
+	Renderer::restoreModelview();
 	Renderer::applyOrtho(0.0f, float(win.getWidth()), 0.0f, float(win.getHeight()), -1.0f, 1.0f);
 	Renderer::enableDepthOverwrite();
 	form.render(GUI::Point2D(win.getWidth(), win.getHeight()), GUI::Point2D(0, 0));
@@ -31,10 +32,15 @@ public:
 		LogVerbose("Hello world from client!");
 		helloworld();
 
-		// Test window
-		Window& win = Window::getInstance("Test", 852, 480);
+		// Test config
+		Config::load();
 
+		// Test window
+		Window& win = Window::getDefaultWindow("Test", 852, 480);
 		Renderer::init();
+
+		// Test player
+		Player player;
 
 		// Test world
 		World world;
@@ -45,6 +51,8 @@ public:
 
 		int cnt = 0;
 
+		win.lockCursor();
+
 		while (!win.shouldQuit()) {
 			Renderer::waitForComplete();
 			win.swapBuffers();
@@ -52,20 +60,25 @@ public:
 			Renderer::setViewport(0, 0, win.getWidth(), win.getHeight());
 			Renderer::clear();
 
-			Renderer::restoreProj();
-			Renderer::restoreModl();
-			Renderer::applyPerspective(70.0f, float(win.getWidth()) / float(win.getHeight()), 0.1f, 100.0f);
-			Renderer::translate(Vec3f(0.0f, 0.0f, -32.0f));
-			Renderer::rotate(float(cnt), Vec3f(1.0f, 0.0f, 0.0f));
-			Renderer::rotate(float(cnt), Vec3f(0.0f, 1.0f, 0.0f));
+			Renderer::restoreProjection();
+			Renderer::restoreModelview();
+
+			Camera camera = player.getCamera(float(win.getWidth()), float(win.getHeight()), 100.0f);
+			Renderer::setProjection(camera.getProjectionMatrix());
+			Renderer::setModelview(camera.getModelViewMatrix());
+
 			vb.render();
 
 			//drawExampleGUI(win);
 
 			win.pollEvents();
 
+			player.update(win);
+
 			cnt++;
 		}
+
+		Config::save();
 	}
 };
 

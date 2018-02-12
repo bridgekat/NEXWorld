@@ -5,17 +5,20 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Source Files\Renderer">
-      <UniqueIdentifier>{125378a8-7b84-4c16-b99f-d5948ad1d2fc}</UniqueIdentifier>
+    <Filter Include="Source Files\control">
+      <UniqueIdentifier>{fe539977-4440-4f26-ba88-8b2f3006c753}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\WorldRenderer">
+    <Filter Include="Source Files\worldrenderer">
       <UniqueIdentifier>{71eafaf3-2a2f-46fa-81c4-1785802c4449}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Multimedia">
-      <UniqueIdentifier>{40ace71e-b81f-4294-9cc3-8cb3d168812b}</UniqueIdentifier>
+    <Filter Include="Source Files\renderer">
+      <UniqueIdentifier>{125378a8-7b84-4c16-b99f-d5948ad1d2fc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\GUI">
+    <Filter Include="Source Files\gui">
       <UniqueIdentifier>{70652e16-4cb3-4c18-9500-6d119288de13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\multimedia">
+      <UniqueIdentifier>{40ace71e-b81f-4294-9cc3-8cb3d168812b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -23,45 +26,51 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\renderer.cpp">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\window.cpp">
-      <Filter>Source Files\Multimedia</Filter>
+      <Filter>Source Files\multimedia</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\gui.cpp">
-      <Filter>Source Files\GUI</Filter>
+      <Filter>Source Files\gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp">
-      <Filter>Source Files\WorldRenderer</Filter>
+      <Filter>Source Files\worldrenderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\player.cpp">
+      <Filter>Source Files\control</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\vertexarray.h">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\renderer.h">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\worldrenderer.h">
-      <Filter>Source Files\WorldRenderer</Filter>
+      <Filter>Source Files\worldrenderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h">
-      <Filter>Source Files\WorldRenderer</Filter>
+      <Filter>Source Files\worldrenderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\opengl.h">
-      <Filter>Source Files\Renderer</Filter>
+      <Filter>Source Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\window.h">
-      <Filter>Source Files\Multimedia</Filter>
+      <Filter>Source Files\multimedia</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\gui.h">
-      <Filter>Source Files\GUI</Filter>
+      <Filter>Source Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\player.h">
+      <Filter>Source Files\control</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

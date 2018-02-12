@@ -3,6 +3,13 @@
 
 #include <string>
 #include <SDL2/SDL.h>
+#include <debug.h>
+
+class MouseState {
+public:
+	int x, y;
+	bool left, mid, right, relative = true;
+};
 
 class Window {
 public:
@@ -13,31 +20,33 @@ public:
 	void swapBuffers() const { SDL_GL_SwapWindow(mWindow); }
 
 	static const Uint8* getKeyBoardState() { return SDL_GetKeyboardState(nullptr); }
+	static bool isKeyPressed(Uint8 c) { return getKeyBoardState()[c] != 0; }
 
 	int getWidth() const { return mWidth; }
 	int getHeight() const { return mHeight; }
 
-	void pollEvents() {
-		SDL_Event e;
-		while (SDL_PollEvent(&e)) {
-			switch (e.type) {
-			case SDL_QUIT:
-				mShouldQuit = true;
-				break;
-			case SDL_WINDOWEVENT:
-				switch (e.window.event) {
-				case SDL_WINDOWEVENT_RESIZED:
-				case SDL_WINDOWEVENT_SIZE_CHANGED:
-					mWidth = e.window.data1;
-					mHeight = e.window.data2;
-					break;
-				}
-				break;
-			}
+	MouseState getMousePosition() const {
+		if (mMouse.relative) {
+			// Cursor locked, use getMouseMotion() instead!
+			Assert(false);
 		}
+		return mMouse;
 	}
 
-	static Window& getInstance(const std::string& title = "", int width = 0, int height = 0) {
+	MouseState getMouseMotion() const {
+		if (mMouse.relative) return mMouse;
+		MouseState res = mMouse;
+		res.x -= mPrevMouse.x;
+		res.y -= mPrevMouse.y;
+		return res;
+	}
+
+	void lockCursor() const { SDL_SetRelativeMouseMode(SDL_TRUE); }
+	void unlockCursor() const { SDL_SetRelativeMouseMode(SDL_FALSE); }
+
+	void pollEvents();
+
+	static Window& getDefaultWindow(const std::string& title = "", int width = 0, int height = 0) {
 		static Window win(title, width, height);
 		return win;
 	}
@@ -48,6 +57,7 @@ private:
 	SDL_Window* mWindow = nullptr;
 	std::string mTitle;
 	int mWidth, mHeight;
+	MouseState mMouse, mPrevMouse;
 	bool mShouldQuit = false;
 
 	Window(const std::string& title, int width, int height);

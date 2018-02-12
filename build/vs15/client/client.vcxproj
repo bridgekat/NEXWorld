@@ -145,6 +145,7 @@
     <ClCompile Include="..\..\..\src\client\chunkrenderer.cpp" />
     <ClCompile Include="..\..\..\src\client\gui.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
+    <ClCompile Include="..\..\..\src\client\player.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\window.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
     <ClInclude Include="..\..\..\src\client\gui.h" />
     <ClInclude Include="..\..\..\src\client\opengl.h" />
+    <ClInclude Include="..\..\..\src\client\player.h" />
     <ClInclude Include="..\..\..\src\client\renderer.h" />
     <ClInclude Include="..\..\..\src\client\vertexarray.h" />
     <ClInclude Include="..\..\..\src\client\window.h" />

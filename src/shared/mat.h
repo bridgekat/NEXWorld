@@ -2,8 +2,10 @@
 #define MAT_H_
 
 #include <cassert>
+#include <utility>
 #include "common.h"
 #include "debug.h"
+#include "vec.h"
 
 #ifdef NEXWORLD_DEBUG
 
@@ -176,13 +178,13 @@ public:
 		vec.normalize();
 		T alpha = degrees * T(Pi) / T(180.0), s = sin(alpha), c = cos(alpha), t = 1.0f - c;
 		res.data[0] = t * vec.x * vec.x + c;
-		res.data[1] = t * vec.x * vec.y + s * vec.z;
-		res.data[2] = t * vec.x * vec.z - s * vec.y;
-		res.data[4] = t * vec.x * vec.y - s * vec.z;
+		res.data[1] = t * vec.x * vec.y - s * vec.z;
+		res.data[2] = t * vec.x * vec.z + s * vec.y;
+		res.data[4] = t * vec.x * vec.y + s * vec.z;
 		res.data[5] = t * vec.y * vec.y + c;
-		res.data[6] = t * vec.y * vec.z + s * vec.x;
-		res.data[8] = t * vec.x * vec.z + s * vec.y;
-		res.data[9] = t * vec.y * vec.z - s * vec.x;
+		res.data[6] = t * vec.y * vec.z - s * vec.x;
+		res.data[8] = t * vec.x * vec.z - s * vec.y;
+		res.data[9] = t * vec.y * vec.z + s * vec.x;
 		res.data[10] = t * vec.z * vec.z + c;
 		res.data[15] = T(1.0);
 		return res;
@@ -215,6 +217,15 @@ public:
 		res.data[11] = -(zFar + zNear) / c;
 		res.data[15] = T(1);
 		return res;
+	}
+
+	// Multiply with Vec4(vec, w)
+	std::pair<Vec3<T>, T> transform(const Vec3<T>& vec, T w) const {
+		Vec3<T> res(data[0] * vec.x + data[1] * vec.y + data[2] * vec.z + data[3] * w,
+					data[4] * vec.x + data[5] * vec.y + data[6] * vec.z + data[7] * w,
+					data[8] * vec.x + data[9] * vec.y + data[10] * vec.z + data[11] * w);
+		T rw = data[12] * vec.x + data[13] * vec.y + data[14] * vec.z + data[15] * w;
+		return std::make_pair(res, rw);
 	}
 };
 

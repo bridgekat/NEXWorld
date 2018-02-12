@@ -54,3 +54,42 @@ Window::~Window() {
 	SDL_GL_DeleteContext(mContext);
 	SDL_Quit();
 }
+
+void Window::pollEvents() {
+	// Update mouse state
+	// Relative mode: motion = mMouse.xy, position = [not available]
+	// Absolute mode: motion = (mMouse.xy - mPrevMouse.xy), position = mMouse.xy
+	if (SDL_GetRelativeMouseMode() == SDL_TRUE) {
+		Uint32 buttons = SDL_GetRelativeMouseState(&mMouse.x, &mMouse.y);
+		mMouse.left = buttons | SDL_BUTTON_LEFT;
+		mMouse.right = buttons | SDL_BUTTON_RIGHT;
+		mMouse.mid = buttons | SDL_BUTTON_MIDDLE;
+		mMouse.relative = true;
+	} else {
+		mPrevMouse = mMouse;
+		Uint32 buttons = SDL_GetMouseState(&mMouse.x, &mMouse.y);
+		mMouse.left = buttons | SDL_BUTTON_LEFT;
+		mMouse.right = buttons | SDL_BUTTON_RIGHT;
+		mMouse.mid = buttons | SDL_BUTTON_MIDDLE;
+		if (mMouse.relative) mPrevMouse = mMouse;
+		mMouse.relative = false;
+	}
+
+	SDL_Event e;
+	while (SDL_PollEvent(&e)) {
+		switch (e.type) {
+		case SDL_QUIT:
+			mShouldQuit = true;
+			break;
+		case SDL_WINDOWEVENT:
+			switch (e.window.event) {
+			case SDL_WINDOWEVENT_RESIZED:
+			case SDL_WINDOWEVENT_SIZE_CHANGED:
+				mWidth = e.window.data1;
+				mHeight = e.window.data2;
+				break;
+			}
+			break;
+		}
+	}
+}

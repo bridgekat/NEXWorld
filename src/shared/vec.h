@@ -22,7 +22,7 @@ public:
 	T euclideanDistance(const Vec3& rhs) const { return (*this - rhs).length(); }
 	T chebyshevDistance(const Vec3& rhs) const { return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z)); }
 	T manhattanDistance(const Vec3& rhs) const { return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z); }
-	void normalize() { (*this) /= length(); }
+	Vec3 normalize() { return (*this) / length(); }
 
 	Vec3& operator+= (const Vec3& rhs) {
 		x += rhs.x;
@@ -73,6 +73,9 @@ public:
 		std::swap(y, rhs.y);
 		std::swap(z, rhs.z);
 	}
+
+	Vec3 compMult(const Vec3& r) const { return Vec3(x * r.x, y * r.y, z * r.z); }
+	Vec3 compDiv(const Vec3& r) const { return Vec3(x / r.x, y / r.y, z / r.z); }
 
 	// For each component: begin ~ (end - 1)
 	template <typename Func>

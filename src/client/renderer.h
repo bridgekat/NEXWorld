@@ -16,6 +16,23 @@ public:
 		glViewport(x, y, width, height);
 	}
 
+	static void restoreProjection() {
+		mProjection = Mat4f(1.0f);
+		updateMatrices();
+	}
+	static void restoreModelview() {
+		mModelview = Mat4f(1.0f);
+		updateMatrices();
+	}
+	static void setProjection(const Mat4f& mat) {
+		mProjection = mat;
+		updateMatrices();
+	}
+	static void setModelview(const Mat4f& mat) {
+		mModelview = mat;
+		updateMatrices();
+	}
+
 	static void translate(const Vec3f& delta) {
 		mModelview *= Mat4f::translation(delta);
 		updateMatrices();
@@ -24,16 +41,6 @@ public:
 		mModelview *= Mat4f::rotation(degrees, scale);
 		updateMatrices();
 	}
-
-	static void restoreProj() {
-		mProjection = Mat4f(1.0f);
-		updateMatrices();
-	}
-	static void restoreModl() {
-		mModelview = Mat4f(1.0f);
-		updateMatrices();
-	}
-
 	static void applyPerspective(float fov, float aspect, float zNear, float zFar) {
 		mProjection *= Mat4f::perspective(fov, aspect, zNear, zFar);
 		updateMatrices();

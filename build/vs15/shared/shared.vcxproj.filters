@@ -5,26 +5,35 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Source Files\Math">
-      <UniqueIdentifier>{d0da8995-3b66-4e6c-9f60-8199b8e63f24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game">
+    <Filter Include="Source Files\game">
       <UniqueIdentifier>{30afa27c-9889-437f-88eb-6a5379c91b11}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game\World">
-      <UniqueIdentifier>{3582cb39-60cd-4a23-8aa0-0a61c9cdfe8d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Chunk">
-      <UniqueIdentifier>{9e585e95-8d5e-4286-9164-bdd1da6c3fcf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Block">
+    <Filter Include="Source Files\game\block">
       <UniqueIdentifier>{c94301ed-7cf1-4b39-920b-3df628a87497}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Network">
+    <Filter Include="Source Files\game\chunk">
+      <UniqueIdentifier>{9e585e95-8d5e-4286-9164-bdd1da6c3fcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\world">
+      <UniqueIdentifier>{3582cb39-60cd-4a23-8aa0-0a61c9cdfe8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\math">
+      <UniqueIdentifier>{d0da8995-3b66-4e6c-9f60-8199b8e63f24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\network">
       <UniqueIdentifier>{57d50845-c71b-4c75-8cd7-8655137ab5ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Data">
+    <Filter Include="Source Files\data">
       <UniqueIdentifier>{a6c83e47-258f-4270-b2b8-054cc2a658ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\concurrency">
+      <UniqueIdentifier>{c8487dbe-6f92-427b-9584-2abde74584e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game\object">
+      <UniqueIdentifier>{e88320ca-aaa7-4931-a99f-a96078c4c961}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\config">
+      <UniqueIdentifier>{dd4ad596-7dd2-4d4e-b7e0-23f670074231}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -41,31 +50,40 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\world.h">
-      <Filter>Source Files\Game\World</Filter>
+      <Filter>Source Files\game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunk.h">
-      <Filter>Source Files\Game\Chunk</Filter>
+      <Filter>Source Files\game\chunk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunkfilter.h">
-      <Filter>Source Files\Game\World</Filter>
+      <Filter>Source Files\game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\blockdata.h">
-      <Filter>Source Files\Game\Block</Filter>
+      <Filter>Source Files\game\block</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\blocktype.h">
-      <Filter>Source Files\Game\Block</Filter>
+      <Filter>Source Files\game\block</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\mat.h">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\vec.h">
-      <Filter>Source Files\Math</Filter>
+      <Filter>Source Files\math</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\worldgen.h">
-      <Filter>Source Files\Game\Chunk</Filter>
+      <Filter>Source Files\game\chunk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\worldloader.h">
-      <Filter>Source Files\Game\World</Filter>
+      <Filter>Source Files\game\world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\object.h">
+      <Filter>Source Files\game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\playerobject.h">
+      <Filter>Source Files\game\object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\config.h">
+      <Filter>Source Files\config</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -73,7 +91,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
-      <Filter>Source Files\Game\World</Filter>
+      <Filter>Source Files\game\world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\config.cpp">
+      <Filter>Source Files\config</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
