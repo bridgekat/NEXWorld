@@ -42,12 +42,10 @@ public:
 
 		// Test world
 		World world;
-		WorldLoader loader(world, 4, Vec3i(1, 1, 1));
-		WorldRenderer worldRenderer(world, 4, Vec3i(1, 1, 1));
+		WorldLoader loader(world, 16, Vec3i(1, 1, 1));
+		WorldRenderer worldRenderer(world, 16, Vec3i(1, 1, 1));
 
 		world.addChunk(Vec3i(0, -1, 0));
-
-		int cnt = 0;
 
 		win.lockCursor();
 
@@ -58,17 +56,10 @@ public:
 			Renderer::setViewport(0, 0, win.getWidth(), win.getHeight());
 			Renderer::clear();
 
-			Renderer::restoreProjection();
-			Renderer::restoreModelview();
-
-			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 300.0f);
+			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 1000.0f);
 			Renderer::setProjection(camera.getProjectionMatrix());
 			Renderer::setModelview(camera.getModelViewMatrix());
-			size_t renderedChunks = worldRenderer.render(player.position());
-
-			//std::stringstream ss;
-			//ss << renderedChunks << " chunks rendered";
-			//LogVerbose(ss.str());
+			worldRenderer.render(player.position());
 
 			//drawExampleGUI(win);
 
@@ -78,14 +69,12 @@ public:
 			worldRenderer.update();
 			world.clearUpdated();
 			std::set<std::pair<int, Vec3i> > res = loader.getLoadSequence();
-			for (auto& it: res) {
-				world.addChunk(it.second);
-			}
-
-			cnt++;
+			for (auto& it: res) world.addChunk(it.second);
 
 			if (Window::isKeyPressed(SDL_SCANCODE_ESCAPE)) break;
 		}
+
+		win.unlockCursor();
 
 		Config::save();
 	}
