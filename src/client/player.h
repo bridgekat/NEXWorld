@@ -12,10 +12,10 @@ public:
 
 	void update(const Window& win);
 
-	Camera getCamera(float width, float height, float zFar) const {
+	// In relative space, camera position is always the origin
+	Camera getRelativeCamera(float width, float height, float zFar) const {
 		Camera res;
 		res.setPerspective(mFOV, width / height, 0.1f, zFar);
-		res.setPosition(mPosition);
 		res.setRotation(mRotation);
 		return res;
 	}

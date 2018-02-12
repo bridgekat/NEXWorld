@@ -46,17 +46,11 @@
     <ClInclude Include="..\..\..\src\shared\logger.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\main.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\src\shared\world.h">
       <Filter>Source Files\game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\chunk.h">
       <Filter>Source Files\game\chunk</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\shared\chunkfilter.h">
-      <Filter>Source Files\game\world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\shared\blockdata.h">
       <Filter>Source Files\game\block</Filter>
@@ -87,9 +81,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\shared\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
       <Filter>Source Files\game\world</Filter>
     </ClCompile>

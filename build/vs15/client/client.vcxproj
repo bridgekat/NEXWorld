@@ -149,6 +149,7 @@
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\window.cpp" />
+    <ClCompile Include="..\..\..\src\client\worldrenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h" />

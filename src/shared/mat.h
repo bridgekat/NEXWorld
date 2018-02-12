@@ -40,7 +40,7 @@ public:
 	}
 	explicit Mat4(T* src) { memcpy(data, src, sizeof(data)); }
 
-#ifdef NDEBUG
+#ifndef NEXWORLD_DEBUG
 
 	T* operator[](size_t index) { return data + index * 4; }
 

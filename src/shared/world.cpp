@@ -1,6 +1,7 @@
 #include "world.h"
 
 #include <sstream>
+#include <set>
 #include "debug.h"
 #include "logger.h"
 
@@ -26,6 +27,17 @@ void World::deleteChunk(const Vec3i& pos) {
 	}
 	delete it->second;
 	mChunks.erase(it);
+}
+
+std::vector<const Chunk*> World::filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const {
+	std::set<std::pair<int, const Chunk*> > s;
+	for (auto& it: mChunks) {
+		s.insert(std::make_pair(getWeight(it.second), it.second));
+		if (s.size() > count) s.erase(*s.rbegin());
+	}
+	std::vector<const Chunk*> res;
+	for (auto& it: s) res.push_back(it.second);
+	return res;
 }
 
 Chunk* World::getChunkPtr(const Vec3i& pos) {

@@ -8,21 +8,24 @@
 
 class Chunk {
 public:
-	static constexpr int SizeLog2 = 4;
+	static constexpr int SizeLog2 = 5;
 	static constexpr int Size = 1 << SizeLog2;
 
-	Chunk(const Vec3i& pos): mPos(pos), mReady(false) {}
+	Chunk(const Vec3i& pos): mPos(pos), mReady(false), mUpdated(false) {}
 
 	Vec3i pos() const { return mPos; }
 	bool ready() const { return mReady; }
+	bool updated() const { return mUpdated; }
+	void clearUpdated() { mUpdated = false; }
 
 	void genTerrain() {
 		// TODO: invoke WorldGen::generator
 		Vec3i::range(0, Size, [&](const Vec3i& pos) {
-			if (mPos.y >= 0 || (pos - Vec3i(7, 7, 7)).lengthSqr() > 6 * 6) mBlocks[getBlockIndex(pos)] = BlockData(0);
+			if (mPos.y >= 0 || (pos - Vec3i(15, 15, 15)).lengthSqr() > 15 * 15) mBlocks[getBlockIndex(pos)] = BlockData(0);
 			else mBlocks[getBlockIndex(pos)] = BlockData(1);
 		});
 		mReady = true;
+		mUpdated = true;
 	}
 
 	BlockData getBlock(const Vec3i& pos) const {
@@ -32,7 +35,7 @@ public:
 
 private:
 	Vec3i mPos;
-	bool mReady;
+	bool mReady, mUpdated;
 	BlockData mBlocks[Size * Size * Size];
 
 	static size_t getBlockIndex(const Vec3i& pos) {

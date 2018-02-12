@@ -2,7 +2,7 @@
 #define VEC_H_
 
 #include <cmath>
-#include <utility>
+#include <algorithm>
 
 template <typename T>
 class Vec3 {
@@ -20,8 +20,8 @@ public:
 	T length() const { return sqrt(lengthSqr()); }
 
 	T euclideanDistance(const Vec3& rhs) const { return (*this - rhs).length(); }
-	T chebyshevDistance(const Vec3& rhs) const { return max(max(abs(x - rhs.x), abs(y - rhs.y)), abs(z - rhs.z)); }
-	T manhattanDistance(const Vec3& rhs) const { return abs(x - rhs.x) + abs(y - rhs.y) + abs(z - rhs.z); }
+	T chebyshevDistance(const Vec3& rhs) const { return std::max(std::max(std::abs(x - rhs.x), std::abs(y - rhs.y)), std::abs(z - rhs.z)); }
+	T manhattanDistance(const Vec3& rhs) const { return std::abs(x - rhs.x) + std::abs(y - rhs.y) + std::abs(z - rhs.z); }
 	Vec3 normalize() { return (*this) / length(); }
 
 	Vec3& operator+= (const Vec3& rhs) {

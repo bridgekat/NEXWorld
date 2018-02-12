@@ -1,7 +1,9 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
+#include <vector>
 #include <unordered_map>
+#include <functional>
 #include "common.h"
 #include "vec.h"
 #include "chunk.h"
@@ -26,6 +28,11 @@ public:
 
 	bool chunkExists(const Vec3i& chunkPos) const { return getChunkPtr(chunkPos) != nullptr; }
 	bool chunkReady(const Vec3i& chunkPos) const { return chunkExists(chunkPos) && getChunkPtr(chunkPos)->ready(); }
+	// Returns the first `count` chunks with the least weight
+	std::vector<const Chunk*> filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const;
+	void clearUpdated() {
+		for (auto& it: mChunks) it.second->clearUpdated();
+	}
 
 	BlockData getBlock(const Vec3i& pos) const {
 		const Chunk* p = getChunkPtr(toChunkPos(pos));

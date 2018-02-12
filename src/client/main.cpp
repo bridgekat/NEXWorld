@@ -1,9 +1,8 @@
-#include <main.h>
 #include <world.h>
 #include <worldloader.h>
 #include "window.h"
 #include "renderer.h"
-#include "chunkrenderer.h"
+#include "worldrenderer.h"
 #include "gui.h"
 #include "player.h"
 
@@ -29,8 +28,7 @@ class orld {
 public:
 	orld() {
 		// Meaningless helloworld
-		LogVerbose("Hello world from client!");
-		helloworld();
+		LogVerbose("Hello, world!");
 
 		// Test config
 		Config::load();
@@ -45,9 +43,9 @@ public:
 		// Test world
 		World world;
 		WorldLoader loader(world, 4, Vec3i(1, 1, 1));
+		WorldRenderer worldRenderer(world, 4, Vec3i(1, 1, 1));
 
 		world.addChunk(Vec3i(0, -1, 0));
-		VertexBuffer vb = ChunkRenderer(world, Vec3i(0, -1, 0)).buildRender();
 
 		int cnt = 0;
 
@@ -63,19 +61,30 @@ public:
 			Renderer::restoreProjection();
 			Renderer::restoreModelview();
 
-			Camera camera = player.getCamera(float(win.getWidth()), float(win.getHeight()), 100.0f);
+			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 300.0f);
 			Renderer::setProjection(camera.getProjectionMatrix());
 			Renderer::setModelview(camera.getModelViewMatrix());
+			size_t renderedChunks = worldRenderer.render(player.position());
 
-			vb.render();
+			//std::stringstream ss;
+			//ss << renderedChunks << " chunks rendered";
+			//LogVerbose(ss.str());
 
 			//drawExampleGUI(win);
 
 			win.pollEvents();
 
 			player.update(win);
+			worldRenderer.update();
+			world.clearUpdated();
+			std::set<std::pair<int, Vec3i> > res = loader.getLoadSequence();
+			for (auto& it: res) {
+				world.addChunk(it.second);
+			}
 
 			cnt++;
+
+			if (Window::isKeyPressed(SDL_SCANCODE_ESCAPE)) break;
 		}
 
 		Config::save();

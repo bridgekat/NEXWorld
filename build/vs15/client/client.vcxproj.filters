@@ -43,6 +43,9 @@
     <ClCompile Include="..\..\..\src\client\player.cpp">
       <Filter>Source Files\control</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\client\worldrenderer.cpp">
+      <Filter>Source Files\worldrenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h">

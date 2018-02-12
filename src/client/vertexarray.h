@@ -3,6 +3,7 @@
 
 #include <cstring>
 #include <initializer_list>
+#include <algorithm>
 #include <common.h>
 #include "opengl.h"
 #include <debug.h>
@@ -10,13 +11,13 @@
 class VertexFormat {
 public:
 	// Vertex attribute count
-	size_t textureCount, colorCount, normalCount, coordinateCount;
+	unsigned int textureCount, colorCount, normalCount, coordinateCount;
 	// Vertex attributes count (sum of all)
 	int vertexAttributeCount;
 
 	VertexFormat(): textureCount(0), colorCount(0), normalCount(0), coordinateCount(0), vertexAttributeCount(0) {}
 
-	VertexFormat(int textureElementCount, int colorElementCount, int normalElementCount, int coordinateElementCount):
+	VertexFormat(unsigned int textureElementCount, unsigned int colorElementCount, unsigned int normalElementCount, unsigned int coordinateElementCount):
 		textureCount(textureElementCount), colorCount(colorElementCount), normalCount(normalElementCount), coordinateCount(coordinateElementCount),
 		vertexAttributeCount(textureElementCount + colorElementCount + normalElementCount + coordinateElementCount) {
 		Assert(textureCount <= 3);
@@ -89,7 +90,7 @@ public:
 		addVertex(coords.begin());
 	}
 
-	void addPrimitive(size_t size, std::initializer_list<float> d) {
+	void addPrimitive(unsigned int size, std::initializer_list<float> d) {
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount, d.begin(), size * mFormat.vertexAttributeCount * sizeof(float));
 		mVertexes += size;
 	}
@@ -122,12 +123,22 @@ public:
 		id(id_), vertexes(vertexes_), format(format_) {}
 	explicit VertexBuffer(const VertexArray& va, bool staticDraw = true);
 	~VertexBuffer() { destroy(); }
-	VertexBuffer& operator=(const VertexBuffer& r) = delete;
+
+	VertexBuffer& operator=(VertexBuffer&& r) {
+		swap(r);
+		return *this;
+	}
 
 	// Is empty
 	bool empty() const { return id == 0; }
 	// Upload new data
 	void update(const VertexArray& va, bool staticDraw = true);
+	// Swap
+	void swap(VertexBuffer& r) {
+		std::swap(id, r.id);
+		std::swap(vertexes, r.vertexes);
+		std::swap(format, r.format);
+	}
 	// Render vertex buffer
 	void render() const;
 	// Destroy vertex buffer
