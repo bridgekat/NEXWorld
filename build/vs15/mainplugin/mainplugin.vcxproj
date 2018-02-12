@@ -71,26 +71,26 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)..\..\src\client;$(SolutionDir)..\..\src\server;$(SolutionDir)..\..\src\shared;$(SolutionDir)..\..\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\lib;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)..\..\release\x86\Plugins</OutDir>
+    <LibraryPath>$(SolutionDir)..\..\lib;$(SolutionDir)$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)..\..\release\x86\Plugins\</OutDir>
     <TargetName>MainPlugin</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)..\..\src\client;$(SolutionDir)..\..\src\server;$(SolutionDir)..\..\src\shared;$(SolutionDir)..\..\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\lib;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)..\..\release\x86\Plugins</OutDir>
+    <LibraryPath>$(SolutionDir)..\..\lib;$(SolutionDir)$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)..\..\release\x86\Plugins\</OutDir>
     <TargetName>MainPlugin</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(SolutionDir)..\..\src\client;$(SolutionDir)..\..\src\server;$(SolutionDir)..\..\src\shared;$(SolutionDir)..\..\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\lib64;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)..\..\release\x64\Plugins</OutDir>
+    <LibraryPath>$(SolutionDir)..\..\lib64;$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)..\..\release\x64\Plugins\</OutDir>
     <TargetName>MainPlugin</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(SolutionDir)..\..\src\client;$(SolutionDir)..\..\src\server;$(SolutionDir)..\..\src\shared;$(SolutionDir)..\..\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\lib64;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)..\..\release\x64\Plugins</OutDir>
+    <LibraryPath>$(SolutionDir)..\..\lib64;$(SolutionDir)$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)..\..\release\x64\Plugins\</OutDir>
     <TargetName>MainPlugin</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,6 +101,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>NEXWORLD_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -113,7 +114,10 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>NEXWORLD_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link />
+    <Link />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -121,7 +125,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>NEXWORLD_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -131,6 +137,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>NEXWORLD_PLUGIN;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -138,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\mainplugin\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

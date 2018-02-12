@@ -16,6 +16,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shared", "shared\shared.vcxproj", "{263A7F3A-353F-4104-9C65-62AE356367E1}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mainplugin", "mainplugin\mainplugin.vcxproj", "{C17032AE-459A-4873-9A75-DB976100231F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{263A7F3A-353F-4104-9C65-62AE356367E1} = {263A7F3A-353F-4104-9C65-62AE356367E1}
+		{FD1F8253-D4B5-4C5C-8A2E-5F3C393C04D6} = {FD1F8253-D4B5-4C5C-8A2E-5F3C393C04D6}
+		{6BC8A25A-EC1A-4E38-902C-7B30E8B99FC6} = {6BC8A25A-EC1A-4E38-902C-7B30E8B99FC6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

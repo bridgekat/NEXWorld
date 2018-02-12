@@ -20,6 +20,9 @@
     <Filter Include="Source Files\WorldRenderer">
       <UniqueIdentifier>{71eafaf3-2a2f-46fa-81c4-1785802c4449}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Renderer\Textures">
+      <UniqueIdentifier>{4f85004f-d371-4d26-a901-2828796f17e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\main.cpp">

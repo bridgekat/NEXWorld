@@ -5,6 +5,7 @@
 #include "worldrenderer.h"
 #include "gui.h"
 #include "player.h"
+#include <pluginapi.h>
 
 void drawExampleGUI(const Window& win) {
 	GUI::Form form;
@@ -27,14 +28,13 @@ void drawExampleGUI(const Window& win) {
 class orld {
 public:
 	orld() {
-		// Meaningless helloworld
-		LogVerbose("Hello, world!");
+		LogInfo(LogInfoString);
 
 		// Test config
 		Config::load();
 
 		// Test window
-		Window& win = Window::getDefaultWindow("Test", 852, 480);
+		Window& win = Window::getDefaultWindow("", 852, 480);
 		Renderer::init();
 
 		// Test player
@@ -42,8 +42,8 @@ public:
 
 		// Test world
 		World world;
-		WorldLoader loader(world, 16, Vec3i(1, 1, 1));
-		WorldRenderer worldRenderer(world, 16, Vec3i(1, 1, 1));
+		WorldLoader loader(world, 2, Vec3i(1, 1, 1));
+		WorldRenderer worldRenderer(world, 2, Vec3i(1, 1, 1));
 
 		world.addChunk(Vec3i(0, -1, 0));
 

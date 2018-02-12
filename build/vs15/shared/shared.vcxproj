@@ -146,6 +146,8 @@
     <ClInclude Include="..\..\..\src\shared\mat.h" />
     <ClInclude Include="..\..\..\src\shared\object.h" />
     <ClInclude Include="..\..\..\src\shared\playerobject.h" />
+    <ClInclude Include="..\..\..\src\shared\plugin.h" />
+    <ClInclude Include="..\..\..\src\shared\pluginapi.h" />
     <ClInclude Include="..\..\..\src\shared\vec.h" />
     <ClInclude Include="..\..\..\src\shared\world.h" />
     <ClInclude Include="..\..\..\src\shared\worldgen.h" />
@@ -154,6 +156,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\config.cpp" />
     <ClCompile Include="..\..\..\src\shared\filesystem.cpp" />
+    <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
+    <ClCompile Include="..\..\..\src\shared\pluginapi.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
