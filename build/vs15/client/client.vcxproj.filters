@@ -49,6 +49,9 @@
     <ClCompile Include="..\..\..\src\client\worldrenderer.cpp">
       <Filter>Source Files\WorldRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\client\texture.cpp">
+      <Filter>Source Files\Renderer\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\player.h">
       <Filter>Source Files\Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\texture.h">
+      <Filter>Source Files\Renderer\Textures</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

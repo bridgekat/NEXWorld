@@ -6,6 +6,7 @@
 #include "gui.h"
 #include "player.h"
 #include <pluginapi.h>
+#include "texture.h"
 
 void drawExampleGUI(const Window& win) {
 	GUI::Form form;
@@ -44,6 +45,13 @@ public:
 		World world;
 		WorldLoader loader(world, 2, Vec3i(1, 1, 1));
 		WorldRenderer worldRenderer(world, 2, Vec3i(1, 1, 1));
+
+		// Test texture
+		Bitmap image("../Textures/untitled.bmp");
+		Texture tex(image, false, -1);
+
+		Renderer::enableTexture2D();
+		tex.bind();
 
 		world.addChunk(Vec3i(0, -1, 0));
 

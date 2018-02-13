@@ -52,9 +52,9 @@
 #endif
 
 #ifdef NEXWORLD_PLUGIN
-#define NXAPIENTRY NXAPIIMPORT
+#	define NXAPIENTRY NXAPIIMPORT
 #else
-#define NXAPIENTRY NXAPIEXPORT
+#	define NXAPIENTRY NXAPIEXPORT
 #endif
 
 constexpr const char* RootPath = "../";
