@@ -40,14 +40,20 @@ std::vector<const Chunk*> World::filterChunks(const std::function<int(const Chun
 	return res;
 }
 
-Chunk* World::getChunkPtr(const Vec3i& pos) {
+const Chunk* World::getChunkPtr(const Vec3i& pos) const {
+//	const Chunk* c = mCPA.get(pos);
+//	if (c != nullptr) return c;
 	auto it = mChunks.find(pos);
 	if (it == mChunks.end()) return nullptr;
+//	mCPA.set(pos, it->second);
 	return it->second;
 }
 
-const Chunk* World::getChunkPtr(const Vec3i& pos) const {
+Chunk* World::getChunkPtr(const Vec3i& pos) {
+//	Chunk* c = mCPA.get(pos);
+//	if (c != nullptr) return c;
 	auto it = mChunks.find(pos);
 	if (it == mChunks.end()) return nullptr;
+//	mCPA.set(pos, it->second);
 	return it->second;
 }

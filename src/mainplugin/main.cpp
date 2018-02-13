@@ -1,5 +1,6 @@
 #include <pluginapi.h>
 
-NXAPIEXPORT void NXAPICALL Init() {
-	nxLog("Hello world from NEXWorldMainPlugin!");
+NWAPIEXPORT int NWAPICALL Init() {
+	nwLog("Hello world from NEXWorldMainPlugin!");
+	return 0;
 }

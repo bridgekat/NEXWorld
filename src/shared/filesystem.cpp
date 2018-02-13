@@ -1,5 +1,7 @@
 #include "filesystem.h"
+#include <sstream>
 #include "common.h"
+#include "logger.h"
 
 #ifdef NEXWORLD_TARGET_WINDOWS
 #include <Windows.h>
@@ -28,13 +30,19 @@ void Filesystem::createDirectory(const std::string& path) {
 #endif
 }
 
-void Filesystem::inDirectory(std::string path, std::function<void(std::string)> callback) {
+void Filesystem::inDirectory(const std::string& path, std::function<void(std::string)> callback) {
 #ifdef NEXWORLD_TARGET_WINDOWS
 	WIN32_FIND_DATA ffd;
-	HANDLE hFind = FindFirstFileA((path + "\\*").c_str(), &ffd);
+	HANDLE hFind = FindFirstFileA((path + "*").c_str(), &ffd);
+	if (hFind == INVALID_HANDLE_VALUE) {
+		std::stringstream ss;
+		ss << "Listing directory \"" + path + "\" failed: error " << GetLastError();
+		LogWarning(ss.str());
+		return;
+	}
 	do {
 		if (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) continue;
-		callback(path + "\\" + ffd.cFileName);
+		callback(path + std::string(ffd.cFileName));
 	} while (FindNextFileA(hFind, &ffd) != 0);
 	FindClose(hFind);
 #else

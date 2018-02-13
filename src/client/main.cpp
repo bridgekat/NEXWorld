@@ -1,3 +1,5 @@
+#include <plugin.h>
+#include <pluginapi.h>
 #include <world.h>
 #include <worldloader.h>
 #include "window.h"
@@ -5,7 +7,6 @@
 #include "worldrenderer.h"
 #include "gui.h"
 #include "player.h"
-#include <pluginapi.h>
 #include "texture.h"
 
 void drawExampleGUI(const Window& win) {
@@ -22,7 +23,9 @@ void drawExampleGUI(const Window& win) {
 	Renderer::restoreModelview();
 	Renderer::applyOrtho(0.0f, float(win.getWidth()), 0.0f, float(win.getHeight()), -1.0f, 1.0f);
 	Renderer::enableDepthOverwrite();
+	Renderer::disableTexture2D();
 	form.render(GUI::Point2D(win.getWidth(), win.getHeight()), GUI::Point2D(0, 0));
+	Renderer::enableTexture2D();
 	Renderer::disableDepthOverwrite();
 }
 
@@ -30,6 +33,7 @@ class orld {
 public:
 	orld() {
 		LogInfo(LogInfoString);
+		nwLog("gg");
 
 		// Test config
 		Config::load();
@@ -38,22 +42,23 @@ public:
 		Window& win = Window::getDefaultWindow("", 852, 480);
 		Renderer::init();
 
+		// Test plugins
+		Plugin::loadAll();
+
 		// Test player
 		Player player;
 
 		// Test world
 		World world;
-		WorldLoader loader(world, 2, Vec3i(1, 1, 1));
-		WorldRenderer worldRenderer(world, 2, Vec3i(1, 1, 1));
+		WorldLoader loader(world, 4, Vec3i(0, 0, 0));
+		WorldRenderer worldRenderer(world, 4, Vec3i(0, 0, 0));
 
 		// Test texture
-		Bitmap image("../Textures/untitled.bmp");
+		TextureImage image("../Textures/untitled.png");
 		Texture tex(image, false, -1);
 
 		Renderer::enableTexture2D();
 		tex.bind();
-
-		world.addChunk(Vec3i(0, -1, 0));
 
 		win.lockCursor();
 

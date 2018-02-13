@@ -1,8 +1,8 @@
 #ifndef VEC_H_
 #define VEC_H_
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 template <typename T>
 class Vec3 {
@@ -14,14 +14,14 @@ public:
 	Vec3(T v) : x(v), y(v), z(v) {}
 
 	template <typename U, std::enable_if_t<std::is_convertible<T, U>::value, int> = 0>
-	Vec3(const Vec3<U>& rhs) : x(T(rhs.x)), y(T(rhs.y)), z(T(rhs.z)) {}
+	Vec3(const Vec3<U>& rhs): x(T(rhs.x)), y(T(rhs.y)), z(T(rhs.z)) {}
 
 	T lengthSqr() const { return x * x + y * y + z * z; }
-	T length() const { return sqrt(lengthSqr()); }
+	T length() const { return std::sqrt(lengthSqr()); }
 
 	T euclideanDistance(const Vec3& rhs) const { return (*this - rhs).length(); }
-	T chebyshevDistance(const Vec3& rhs) const { return std::max(std::max(std::abs(x - rhs.x), std::abs(y - rhs.y)), std::abs(z - rhs.z)); }
-	T manhattanDistance(const Vec3& rhs) const { return std::abs(x - rhs.x) + std::abs(y - rhs.y) + std::abs(z - rhs.z); }
+	T chebyshevDistance(const Vec3& rhs) const { return Max(Max(Abs(x - rhs.x), Abs(y - rhs.y)), Abs(z - rhs.z)); }
+	T manhattanDistance(const Vec3& rhs) const { return Abs(x - rhs.x) + Abs(y - rhs.y) + Abs(z - rhs.z); }
 	Vec3 normalize() { return (*this) / length(); }
 
 	Vec3& operator+= (const Vec3& rhs) {
@@ -96,6 +96,11 @@ public:
 				for (a.z = begin.z; a.z < end.z; a.z++)
 					func(a);
 	}
+
+private:
+	// Solve strange problem caused by std::max & std::abs ...?
+	static T Max(T l, T r) { return l > r ? l : r; }
+	static T Abs(T x) { return x >= T(0) ? x : -x; }
 };
 
 using Vec3i = Vec3<int>;

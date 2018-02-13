@@ -3,7 +3,7 @@
 
 extern "C" {
 
-	NXAPIEXPORT void NXAPICALL nxLog(const char* s) {
+	NWAPIEXPORT void NWAPICALL nwLog(const char* s) {
 		LogInfo("[Plugin]" + std::string(s));
 	}
 

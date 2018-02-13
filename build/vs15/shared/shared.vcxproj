@@ -137,6 +137,7 @@
     <ClInclude Include="..\..\..\src\shared\blockdata.h" />
     <ClInclude Include="..\..\..\src\shared\blocktype.h" />
     <ClInclude Include="..\..\..\src\shared\chunk.h" />
+    <ClInclude Include="..\..\..\src\shared\arraymap.h" />
     <ClInclude Include="..\..\..\src\shared\common.h" />
     <ClInclude Include="..\..\..\src\shared\config.h" />
     <ClInclude Include="..\..\..\src\shared\debug.h" />

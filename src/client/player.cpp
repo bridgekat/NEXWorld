@@ -14,11 +14,11 @@ Player::Player(): PlayerObject() {
 void Player::update(const Window& win) {
 	MouseState mouse = win.getMouseMotion();
 	rotate(Vec3d(-mouse.y * mMouseSensitivity, -mouse.x * mMouseSensitivity, 0.0));
-	if (Window::isKeyPressed(mForwardKey)) moveOriented(Vec3d(0.0, 0.0, -0.5), Vec3f(1.0f));
-	if (Window::isKeyPressed(mBackwardKey)) moveOriented(Vec3d(0.0, 0.0, 0.5), Vec3f(1.0f));
-	if (Window::isKeyPressed(mLeftKey)) moveOriented(Vec3d(-0.5, 0.0, 0.0), Vec3f(1.0f));
-	if (Window::isKeyPressed(mRightKey)) moveOriented(Vec3d(0.5, 0.0, 0.0), Vec3f(1.0f));
-	if (Window::isKeyPressed(mUpKey)) moveOriented(Vec3d(0.0, 0.5, 0.0), Vec3f(1.0f));
-	if (Window::isKeyPressed(mDownKey)) moveOriented(Vec3d(0.0, -0.5, 0.0), Vec3f(1.0f));
+	if (Window::isKeyPressed(mForwardKey)) moveOriented(Vec3d(0.0, 0.0, -0.5), Vec3i(0, 1, 0));
+	if (Window::isKeyPressed(mBackwardKey)) moveOriented(Vec3d(0.0, 0.0, 0.5), Vec3i(0, 1, 0));
+	if (Window::isKeyPressed(mLeftKey)) moveOriented(Vec3d(-0.5, 0.0, 0.0), Vec3i(0, 1, 0));
+	if (Window::isKeyPressed(mRightKey)) moveOriented(Vec3d(0.5, 0.0, 0.0), Vec3i(0, 1, 0));
+	if (Window::isKeyPressed(mUpKey)) moveOriented(Vec3d(0.0, 0.5, 0.0), Vec3i(0, 1, 0));
+	if (Window::isKeyPressed(mDownKey)) moveOriented(Vec3d(0.0, -0.5, 0.0), Vec3i(0, 1, 0));
 	PlayerObject::update();
 }

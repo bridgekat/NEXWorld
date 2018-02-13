@@ -94,6 +94,9 @@
     <ClInclude Include="..\..\..\src\shared\pluginapi.h">
       <Filter>Source Files\Plugins</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\arraymap.h">
+      <Filter>Source Files\Game\World</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\world.cpp">

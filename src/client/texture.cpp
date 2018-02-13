@@ -5,71 +5,37 @@
 #include <common.h>
 #include <debug.h>
 
-#pragma pack(push)
-#pragma pack(1) // Avoid structure alignment
-
-struct BitmapInfoHeader {
-	int biSize = 40, biWidth, biHeight;
-	short biPlanes = 1, biBitCount = 24;
-	int biCompression = 0, biSizeImage = 0, biXPelsPerMeter = 3780, biYPelsPerMeter = 3780, biClrUsed = 0, biClrImportant = 0;
-};
-
-struct BitmapFileHeader {
-	short bfType = 0x4D42;
-	int bfSize;
-	short bfReserved1 = 0, bfReserved2 = 0;
-	int bfOffBits = 54;
-};
-
-#pragma pack(pop)
-
-inline int alignedPitch(int pitch, int align) {
+inline int alignedPitch(int pitch, int align = 4) {
 	if (pitch % align == 0) return pitch;
 	return pitch + align - pitch % align;
 }
 
-// Convert between BGR and RGB
-void Bitmap::swapRBChannels() {
-	int p = 0;
-	for (int i = 0; i < h; i++) {
-		for (int j = 0; j < w; j++) {
-			int ind = p + j * 3;
-			unsigned char t = data[ind];
-			data[ind] = data[ind + 2];
-			data[ind + 2] = t;
-		}
-		p += pitch;
+void TextureImage::loadFromPNG(const std::string& filename) {
+	SDL_Surface* surface = IMG_LoadPNG_RW(SDL_RWFromFile(filename.c_str(), "rb"));
+
+	if (surface == nullptr) {
+		LogWarning("Failed to load file \"" + filename + "\" as PNG image: " + IMG_GetError());
+		return;
 	}
-}
 
-void Bitmap::load(const std::string& filename) {
-	std::ifstream bmpfile(filename.c_str(), std::ios::binary | std::ios::in);
-	BitmapFileHeader bfh;
-	BitmapInfoHeader bih;
-	bmpfile.read((char*)&bfh, sizeof(BitmapFileHeader));
-	bmpfile.read((char*)&bih, sizeof(BitmapInfoHeader));
-	w = bih.biWidth;
-	h = bih.biHeight;
-	pitch = alignedPitch(bih.biWidth * 3, 4); // Pixel alignment (4 bytes)
-	data = new unsigned char[pitch * h];
-	bmpfile.read((char*)data, pitch * h);
-	bmpfile.close();
-	swapRBChannels();
-}
+	if (surface->format->BytesPerPixel != 3 && surface->format->BytesPerPixel != 4) {
+		LogWarning("Failed to load file \"" + filename + "\" as PNG image: unsupported format (only RGB/RGBA is supported)");
+		return;
+	}
 
-void Bitmap::save(const std::string& filename) {
-	BitmapFileHeader bfh;
-	BitmapInfoHeader bih;
-	bfh.bfSize = pitch * h + 54;
-	bih.biWidth = w;
-	bih.biHeight = h;
-	Bitmap tmp = *this;
-	tmp.swapRBChannels();
-	std::ofstream ofs(filename, std::ios::out | std::ios::binary);
-	ofs.write((char*)&bfh, sizeof(BitmapFileHeader));
-	ofs.write((char*)&bih, sizeof(BitmapInfoHeader));
-	ofs.write((char*)tmp.data, pitch * h);
-	ofs.close();
+	mWidth = surface->w;
+	mHeight = surface->h;
+	mBytesPerPixel = surface->format->BytesPerPixel;
+	mPitch = alignedPitch(mWidth * mBytesPerPixel);
+
+	mData = new unsigned char[mHeight * mPitch];
+
+	for (int i = 0; i < mHeight; i++) {
+		memcpy(mData + i * mPitch, reinterpret_cast<unsigned char*>(surface->pixels) + i * surface->pitch, mWidth * mBytesPerPixel);
+	}
+
+	SDL_FreeSurface(surface);
+	mLoaded = true;
 }
 
 void Build2DMipmaps(TextureFormat format, int w, int h, int level, const unsigned char* src, int srcPitch, TextureFormat srcFormat) {
@@ -110,21 +76,13 @@ void Build2DMipmaps(TextureFormat format, int w, int h, int level, const unsigne
 }
 
 Texture::Texture(const TextureImage& image, bool alpha, int maxLevels) {
-	if (maxLevels == -1) maxLevels = (int)log2(image.width());
-	TextureFormat format = alpha ? TextureFormatRGBA : TextureFormatRGB;
+	Assert(image.bytesPerPixel() == 3 || image.bytesPerPixel() == 4);
+	if (maxLevels < 0) maxLevels = (int)log2(image.width());
+	TextureFormat srcFormat = image.bytesPerPixel() == 4 ? TextureFormatRGBA : TextureFormatRGB;
+	TextureFormat dstFormat = alpha ? TextureFormatRGBA : TextureFormatRGB;
 	glGenTextures(1, &mID);
 	glBindTexture(GL_TEXTURE_2D, mID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	Build2DMipmaps(format, image.width(), image.height(), maxLevels, image.data(), image.width() * 4, TextureFormatRGBA);
-}
-
-Texture::Texture(const Bitmap& image, bool alpha, int maxLevels) {
-	if (maxLevels == -1) maxLevels = (int)log2(image.w);
-	TextureFormat format = alpha ? TextureFormatRGBA : TextureFormatRGB;
-	glGenTextures(1, &mID);
-	glBindTexture(GL_TEXTURE_2D, mID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
-	Build2DMipmaps(format, image.w, image.h, maxLevels, image.data, image.pitch, TextureFormatRGB);
+	Build2DMipmaps(dstFormat, image.width(), image.height(), maxLevels, image.data(), image.pitch(), srcFormat);
 }

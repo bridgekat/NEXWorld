@@ -5,10 +5,10 @@
 
 extern "C" {
 
-	NXAPIENTRY void NXAPICALL nxLog(const char* s);
+	NWAPIENTRY void NWAPICALL nwLog(const char* s);
 
 	// Plugin exported functions
-	NXAPIEXPORT void NXAPICALL Init();
+	NWAPIEXPORT int NWAPICALL Init();
 
 }
 

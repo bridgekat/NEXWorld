@@ -11,8 +11,8 @@ public:
 	void setPosition(const Vec3f& pos) { mPosition = pos; }
 	void setRotation(const Vec3f& rot) { mRotation = rot; }
 
-	void setPerspective(float fov, float aspect, float near, float far) {
-		mFOV = fov, mAspect = aspect, mNear = near, mFar = far;
+	void setPerspective(float fov, float aspect, float zNear, float zFar) {
+		mFOV = fov, mAspect = aspect, mNear = zNear, mFar = zFar;
 	}
 
 	Mat4f getProjectionMatrix() const {

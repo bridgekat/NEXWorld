@@ -8,7 +8,7 @@ class Filesystem {
 public:
 	static bool fileExists(const std::string& path);
 	static void createDirectory(const std::string& path);
-	static void inDirectory(std::string path, std::function<void(std::string)> callback);
+	static void inDirectory(const std::string& path, std::function<void(std::string)> callback);
 };
 
 #endif

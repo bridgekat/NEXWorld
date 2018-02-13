@@ -5,9 +5,7 @@
 #include <string>
 #include <sstream>
 
-#define LOG(MESSAGE, OUT_STREAM, LEVEL) \
-    OUT_STREAM << static_cast<std::ostringstream&>(std::ostringstream().flush() << \
-    LEVEL << MESSAGE).str() << std::endl;
+#define LOG(Message, OutStream, Level) OutStream << Level << Message << std::endl;
 
 inline void LogVerbose(const std::string& message) { LOG(message, std::cout, "[Verbose]"); }
 inline void LogInfo(const std::string& message) { LOG(message, std::cout, "[Info]"); }

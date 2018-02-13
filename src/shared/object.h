@@ -16,7 +16,7 @@ public:
 
 	void move(const Vec3d& d) { mSpeed += d; }
 	void rotate(const Vec3d& d) { mRotateSpeed += d; }
-	void moveOriented(const Vec3d& d, const Vec3f& mul = 1.0f) {
+	void moveOriented(const Vec3d& d, const Vec3i& mul = 1) {
 		Vec3f dir = mRotation.compMult(mul);
 		Mat4f trans(1.0f);
 		trans *= Mat4f::rotation(dir.y, Vec3f(0.0f, 1.0f, 0.0f));

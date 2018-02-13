@@ -1,5 +1,6 @@
 #include "window.h"
 #include <sstream>
+#include <SDL2/SDL_image.h>
 #include "opengl.h"
 #include <logger.h>
 #include <debug.h>
@@ -17,6 +18,7 @@ void GLEWAPIENTRY glDebugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*i
 Window::Window(const std::string& title, int width, int height):
 	mTitle(title), mWidth(width), mHeight(height) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
+	IMG_Init(IMG_INIT_PNG);
 	SDL_GL_SetSwapInterval(0);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -43,8 +45,8 @@ Window::Window(const std::string& title, int width, int height):
 
 #ifdef NEXWORLD_DEBUG
 	if (GLEW_ARB_debug_output) {
-		LogInfo("GL_ARB_debug_output enabled.");
 		glDebugMessageCallbackARB(&glDebugCallback, nullptr);
+		LogInfo("GL_ARB_debug_output enabled.");
 	}
 #endif
 }
@@ -52,6 +54,7 @@ Window::Window(const std::string& title, int width, int height):
 Window::~Window() {
 	SDL_DestroyWindow(mWindow);
 	SDL_GL_DeleteContext(mContext);
+	IMG_Quit();
 	SDL_Quit();
 }
 

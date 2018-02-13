@@ -28,8 +28,11 @@ public:
 
 	bool chunkExists(const Vec3i& chunkPos) const { return getChunkPtr(chunkPos) != nullptr; }
 	bool chunkReady(const Vec3i& chunkPos) const { return chunkExists(chunkPos) && getChunkPtr(chunkPos)->ready(); }
+
+	void iterateChunks(const std::function<void(const Chunk*)>& func) const { for (auto& it: mChunks) func(it.second); }
 	// Returns the first `count` chunks with the least weight
 	std::vector<const Chunk*> filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const;
+
 	void clearUpdated() {
 		for (auto& it: mChunks) it.second->clearUpdated();
 	}

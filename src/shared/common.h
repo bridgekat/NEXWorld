@@ -29,45 +29,45 @@
 
 // NXAPICALL
 #ifdef NEXWORLD_COMPILER_MSVC
-#	define NXAPICALL __cdecl
+#	define NWAPICALL __cdecl
 #elif defined(__i386__) || defined(__i386)
-#	define NXAPICALL __attribute__((__cdecl__))
+#	define NWAPICALL __attribute__((__cdecl__))
 #else
-#	undef NXAPICALL
-#	define NXAPICALL
+#	undef NWAPICALL
+#	define NWAPICALL
 #endif
 
 // NXAPIENTRY
 #ifdef NEXWORLD_TARGET_WINDOWS
 #	ifdef NEXWORLD_COMPILER_MSVC
-#		define NXAPIIMPORT __declspec(dllimport)
-#		define NXAPIEXPORT __declspec(dllexport)
+#		define NWAPIIMPORT __declspec(dllimport)
+#		define NWAPIEXPORT __declspec(dllexport)
 #	else
-#		define NXAPIIMPORT __attribute__((dllimport))
-#		define NXAPIEXPORT __attribute__((dllexport))
+#		define NWAPIIMPORT __attribute__((dllimport))
+#		define NWAPIEXPORT __attribute__((dllexport))
 #	endif
 #else
-#	define NXAPIIMPORT __attribute__((visibility("default")))
-#	define NXAPIEXPORT __attribute__((visibility("default")))
+#	define NWAPIIMPORT __attribute__((visibility("default")))
+#	define NWAPIEXPORT __attribute__((visibility("default")))
 #endif
 
 #ifdef NEXWORLD_PLUGIN
-#	define NXAPIENTRY NXAPIIMPORT
+#	define NWAPIENTRY NWAPIIMPORT
 #else
-#	define NXAPIENTRY NXAPIEXPORT
+#	define NWAPIENTRY NWAPIEXPORT
 #endif
 
 constexpr const char* RootPath = "../";
-constexpr const char* PluginPath = "../Plugins/";
+constexpr const char* PluginPath = "Plugins/";
 constexpr const char* ConfigPath = "../Configs/";
 constexpr const char* ConfigFilename = "Config.ini";
 
 #if defined(NEXWORLD_TARGET_WINDOWS)
-constexpr const char* DylibSuffix = "dll";
+constexpr const char* DylibSuffix = ".dll";
 #elif defined(NEXWORLD_TARGET_MACOSX)
-constexpr const char* DylibSuffix = "dylib";
+constexpr const char* DylibSuffix = ".dylib";
 #elif defined(NEXWORLD_TARGET_LINUX)
-constexpr const char* DylibSuffix = "so";
+constexpr const char* DylibSuffix = ".so";
 #endif
 
 constexpr const char* LogInfoString = "NEXWorld Logs -- Logging powered by Infiniloggers!";

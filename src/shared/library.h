@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "logger.h"
+#include "debug.h"
 
 #ifdef NEXWORLD_TARGET_WINDOWS
 #include <Windows.h>
@@ -53,7 +54,7 @@ private:
 	}
 
 	template<class T> static T* getFunc(HandleType handle, const std::string& name) {
-		assert(handle != nullptr);
+		Assert(handle != nullptr);
 		return reinterpret_cast<T*>(GetProcAddress(handle, name.c_str()));
 	}
 
@@ -72,7 +73,7 @@ private:
 	}
 
 	template<class T> static T* getFunc(HandleType handle, const std::string& name) {
-		assert(handle != nullptr);
+		Assert(handle != nullptr);
 		return reinterpret_cast<T*>(dlsym(handle, name.c_str()));
 	}
 
