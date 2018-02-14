@@ -97,6 +97,12 @@
     <ClInclude Include="..\..\..\src\shared\arraymap.h">
       <Filter>Source Files\Game\World</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\updatecounter.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\shared\updatescheduler.h">
+      <Filter>Source Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\shared\world.cpp">
@@ -116,6 +122,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\shared\worldgen.cpp">
       <Filter>Source Files\Game\Chunk</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\updatecounter.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

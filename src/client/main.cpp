@@ -47,12 +47,15 @@ public:
 		Plugin::preInit();
 		Plugin::postInit();
 
+		// Test game
+		UpdateCounter::init();
+
 		// Test player
 		Player player;
 
 		// Test world
 		World world(9);
-		WorldLoader loader(world, 9, Vec3i(0, 0, 0));
+		WorldLoader worldLoader(world, 9, Vec3i(0, 0, 0));
 		WorldRenderer worldRenderer(world, 8, Vec3i(0, 0, 0));
 
 		// Test texture
@@ -79,20 +82,34 @@ public:
 
 			world.iterateChunks([&loadedChunks, &updatedChunks](const Chunk* c) {
 				loadedChunks++;
-				if (c->ready() && c->updated()) updatedChunks++;
+				if (c->ready() && c->updatedSince(UpdateCounter::curr() - 1)) updatedChunks++;
 			});
 
 			std::stringstream ss;
 			ss << loadedChunks << " chunks loaded, " << updatedChunks << " chunks updated, " << renderedChunks << " chunks rendered";
-			//LogVerbose(ss.str());
+			LogVerbose(ss.str());
 
 			//drawExampleGUI(win);
 
 			win.pollEvents();
-			player.update(win);
+
+			// Game update
+			UpdateCounter::increase();
+
 			worldRenderer.update();
-			std::set<std::pair<int, Vec3i> > res = loader.getLoadSequence();
-			for (auto& it: res) world.addChunk(it.second);
+
+			player.update(win);
+			Vec3i playerChunkPos = World::toChunkPos(Vec3i(player.position()));
+
+			world.setCacheCenter(playerChunkPos);
+			worldLoader.setCenter(playerChunkPos);
+			worldRenderer.setCenter(playerChunkPos);
+
+			auto loads = worldLoader.getLoadSequence();
+			for (auto& it: loads) world.addChunk(it.second);
+
+			auto unloads = worldLoader.getUnloadSequence();
+			for (auto& it: unloads) world.deleteChunk(it.second);
 
 			if (Window::isKeyPressed(SDL_SCANCODE_ESCAPE)) break;
 		}

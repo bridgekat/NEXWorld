@@ -16,15 +16,17 @@ public:
 	void update();
 	size_t render(const Vec3d& relativePos) const;
 
-	void moveCenter(const Vec3i&) {
-
+	void setCenter(const Vec3i& centerPos) {
+		auto res = mChunkVBOs.setCenterPos(mCenterPos);
+		for (auto& i: res) if (i.second != nullptr) i.second->destroy();
+		mCenterPos = centerPos;
 	}
 
 private:
 	World& mWorld;
 	int mRadius;
 	Vec3i mCenterPos;
-	ArrayMap<VertexBuffer*> mChunkVBOs;
+	ArrayMap<std::pair<UpdateCount, VertexBuffer*> > mChunkVBOs;
 
 	size_t mMaxUpdatesPerFrame;
 };

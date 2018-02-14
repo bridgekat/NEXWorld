@@ -36,11 +36,6 @@ public:
 	// Returns the first `count` chunks with the least weight
 	std::vector<const Chunk*> filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const;
 
-	void clearUpdated(const Vec3i& chunkPos) {
-		Chunk* c = getChunkPtr(chunkPos);
-		if (c != nullptr) c->clearUpdated();
-	}
-
 	BlockData getBlock(const Vec3i& pos) const {
 		const Chunk* p = getChunkPtr(toChunkPos(pos));
 		if (p == nullptr || !p->ready()) return BlockData(0);
@@ -49,6 +44,8 @@ public:
 
 	// Be careful! Return value might be nullptr.
 	const Chunk* getChunkPtr(const Vec3i& chunkPos) const;
+	// Optional optimization
+	void setCacheCenter(const Vec3i& centerPos) { mCachedChunkPtrs.move(centerPos); }
 
 private:
 	std::vector<Chunk*> mChunks;

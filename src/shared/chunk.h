@@ -5,6 +5,7 @@
 #include "vec.h"
 #include "blockdata.h"
 #include "worldgen.h"
+#include "updatecounter.h"
 
 class Chunk {
 public:
@@ -15,13 +16,13 @@ public:
 
 	Vec3i pos() const { return mPos; }
 	bool ready() const { return mReady; }
-	bool updated() const { return mUpdated; }
-	void clearUpdated() { mUpdated = false; }
+	bool updatedSince(UpdateCount updateCount) const { return mUpdated > updateCount; }
+	void setUpdated() { mUpdated = UpdateCounter::curr(); }
 
 	void genTerrain() {
 		WorldGen::generator(mPos, mBlocks);
 		mReady = true;
-		mUpdated = true;
+		mUpdated = UpdateCounter::curr();
 	}
 
 	BlockData getBlock(const Vec3i& pos) const {
@@ -36,7 +37,8 @@ public:
 
 private:
 	Vec3i mPos;
-	bool mReady, mUpdated;
+	bool mReady;
+	UpdateCount mUpdated;
 	BlockData mBlocks[Size * Size * Size];
 };
 

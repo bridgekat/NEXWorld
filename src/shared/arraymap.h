@@ -23,21 +23,21 @@ public:
 	std::vector<T> move(const Vec3i& delta) {
 		// Remove out-of-bound entries to avoid collision
 		std::vector<T> res;
-		Vec3i prev = mapPosition(mOrigin);
-		Vec3i next = mapPosition(mOrigin + delta);
-		Vec3i::range(0, mSize, [this, &delta](const Vec3i& pos) {
-			if (inBetween(pos.x, prev.x, next.x) || inBetween(pos.y, prev.y, next.y) || inBetween(pos.z, prev.z, next.z)) {
-				res.push_back(mArray[pos.x * mSize2 + pos.y * mSize + pos.z]);
-				mArray[pos.x * mSize2 + pos.y * mSize + pos.z] = T();
+		Vec3i::range(mOrigin, mOrigin + mSize, [&](const Vec3i& pos) {
+			if (!exist(pos - mOrigin - delta)) {
+				Vec3i mapped = mapPosition(pos);
+				res.push_back(mArray[mapped.x * mSize2 + mapped.y * mSize + mapped.z]);
+				mArray[mapped.x * mSize2 + mapped.y * mSize + mapped.z] = T();
 			}
 		});
 		mOrigin += delta;
 		return res;
 	}
 
-	void setCenterPos(const Vec3i& centerPos) {
+	// Returns removed entries
+	std::vector<T> setCenterPos(const Vec3i& centerPos) {
 		Vec3i pos = centerPos - Vec3i(mSize / 2);
-		move(pos - mOrigin);
+		return move(pos - mOrigin);
 	}
 
 	bool exist(const Vec3i& pos) const {
@@ -64,11 +64,6 @@ private:
 		int res = 0;
 		while (x != 0) x /= 2, res++;
 		return res;
-	}
-
-	// v in [a, b) or in (b, a]
-	int inBetween(int v, int a, int b) {
-		return (a <= b && v >= a && v < b) || (a > b && v <= a && v > b);
 	}
 
 	Vec3i mapPosition(const Vec3i& pos) {
