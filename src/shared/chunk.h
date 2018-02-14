@@ -19,11 +19,7 @@ public:
 	void clearUpdated() { mUpdated = false; }
 
 	void genTerrain() {
-		// TODO: invoke WorldGen::generator
-		Vec3i::range(0, Size, [&](const Vec3i& pos) {
-			if (mPos.y >= 0 || (pos - Vec3i(15, 15, 15)).lengthSqr() > 15 * 15) mBlocks[getBlockIndex(pos)] = BlockData(0);
-			else mBlocks[getBlockIndex(pos)] = BlockData(1);
-		});
+		WorldGen::generator(mPos, mBlocks);
 		mReady = true;
 		mUpdated = true;
 	}
@@ -33,15 +29,15 @@ public:
 		return mBlocks[getBlockIndex(pos)];
 	}
 
-private:
-	Vec3i mPos;
-	bool mReady, mUpdated;
-	BlockData mBlocks[Size * Size * Size];
-
 	static size_t getBlockIndex(const Vec3i& pos) {
 		Assert(pos.x >= 0 && pos.x < Size && pos.y >= 0 && pos.y < Size && pos.z >= 0 && pos.z < Size);
 		return pos.y * Size * Size + pos.x * Size + pos.z;
 	}
+
+private:
+	Vec3i mPos;
+	bool mReady, mUpdated;
+	BlockData mBlocks[Size * Size * Size];
 };
 
 #endif

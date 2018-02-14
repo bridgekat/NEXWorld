@@ -9,18 +9,22 @@
 class WorldRenderer {
 public:
 	WorldRenderer(const World& world, int radius, const Vec3i& centerPos):
-		mWorld(world), mRadius(radius), mCenterPos(centerPos) {
+		mWorld(world), mRadius(radius), mCenterPos(centerPos), mChunkVBOs(mRadius * 2, mCenterPos) {
 		mMaxUpdatesPerFrame = Config::getInt("WorldRenderer.MaxUpdatesPerFrame", 4);
 	}
 
 	void update();
 	size_t render(const Vec3d& relativePos) const;
 
+	void moveCenter(const Vec3i&) {
+
+	}
+
 private:
 	const World& mWorld;
 	int mRadius;
 	Vec3i mCenterPos;
-	std::unordered_map<Vec3i, VertexBuffer> mChunkVBOs;
+	ArrayMap<VertexBuffer*> mChunkVBOs;
 
 	size_t mMaxUpdatesPerFrame;
 };

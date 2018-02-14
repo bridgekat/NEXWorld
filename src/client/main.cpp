@@ -43,7 +43,9 @@ public:
 		Renderer::init();
 
 		// Test plugins
-		Plugin::loadAll();
+		Plugin::loadAll(PluginPath, true);
+		Plugin::preInit();
+		Plugin::postInit();
 
 		// Test player
 		Player player;
@@ -77,7 +79,6 @@ public:
 			//drawExampleGUI(win);
 
 			win.pollEvents();
-
 			player.update(win);
 			worldRenderer.update();
 			world.clearUpdated();

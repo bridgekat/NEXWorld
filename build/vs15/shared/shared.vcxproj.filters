@@ -114,5 +114,8 @@
     <ClCompile Include="..\..\..\src\shared\pluginapi.cpp">
       <Filter>Source Files\Plugins</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\worldgen.cpp">
+      <Filter>Source Files\Game\Chunk</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

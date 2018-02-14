@@ -6,33 +6,34 @@
 #include "logger.h"
 
 void World::addChunk(const Vec3i& pos) {
-	auto it = mChunks.find(pos);
-	if (it != mChunks.end()) {
+	size_t ind = binarySearch(pos);
+	if (searchSuccessful(ind, pos)) {
 		std::stringstream ss;
 		ss << "Adding chunk at (" << pos.x << ", " << pos.y << ", " << pos.z << "): chunk already exists";
 		LogWarning(ss.str());
 		return;
 	}
-	mChunks[pos] = new Chunk(pos);
-	mChunks[pos]->genTerrain();
+	insertEntry(ind);
+	mChunks[ind] = new Chunk(pos);
+	mChunks[ind]->genTerrain();
 }
 
 void World::deleteChunk(const Vec3i& pos) {
-	auto it = mChunks.find(pos);
-	if (it == mChunks.end()) {
+	size_t ind = binarySearch(pos);
+	if (!searchSuccessful(ind, pos)) {
 		std::stringstream ss;
 		ss << "Deleting chunk at (" << pos.x << ", " << pos.y << ", " << pos.z << "): chunk not exists";
 		LogWarning(ss.str());
 		return;
 	}
-	delete it->second;
-	mChunks.erase(it);
+	delete mChunks[ind];
+	eraseEntry(ind);
 }
 
 std::vector<const Chunk*> World::filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const {
 	std::set<std::pair<int, const Chunk*> > s;
-	for (auto& it: mChunks) {
-		s.insert(std::make_pair(getWeight(it.second), it.second));
+	for (auto& c: mChunks) {
+		s.insert(std::make_pair(getWeight(c), c));
 		if (s.size() > count) s.erase(*s.rbegin());
 	}
 	std::vector<const Chunk*> res;
@@ -40,20 +41,30 @@ std::vector<const Chunk*> World::filterChunks(const std::function<int(const Chun
 	return res;
 }
 
+int World::binarySearch(const Vec3i& chunkPos) const {
+	int first = 0, last = int(mChunks.size()) - 1;
+	while (first <= last) {
+		int mid = (first + last) / 2;
+		if (mChunks[mid]->pos() < chunkPos) first = mid + 1;
+		else last = mid - 1;
+	}
+	return first;
+}
+
 const Chunk* World::getChunkPtr(const Vec3i& pos) const {
 //	const Chunk* c = mCPA.get(pos);
 //	if (c != nullptr) return c;
-	auto it = mChunks.find(pos);
-	if (it == mChunks.end()) return nullptr;
-//	mCPA.set(pos, it->second);
-	return it->second;
+	size_t ind = binarySearch(pos);
+	if (!searchSuccessful(ind, pos)) return nullptr;
+//	mCPA.set(pos, mChunks[ind]);
+	return mChunks[ind];
 }
 
 Chunk* World::getChunkPtr(const Vec3i& pos) {
-//	Chunk* c = mCPA.get(pos);
-//	if (c != nullptr) return c;
-	auto it = mChunks.find(pos);
-	if (it == mChunks.end()) return nullptr;
-//	mCPA.set(pos, it->second);
-	return it->second;
+	//	const Chunk* c = mCPA.get(pos);
+	//	if (c != nullptr) return c;
+	size_t ind = binarySearch(pos);
+	if (!searchSuccessful(ind, pos)) return nullptr;
+	//	mCPA.set(pos, mChunks[ind]);
+	return mChunks[ind];
 }

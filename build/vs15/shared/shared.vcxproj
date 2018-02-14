@@ -160,6 +160,7 @@
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
     <ClCompile Include="..\..\..\src\shared\pluginapi.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
+    <ClCompile Include="..\..\..\src\shared\worldgen.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

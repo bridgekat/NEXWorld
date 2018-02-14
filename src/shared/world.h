@@ -29,13 +29,11 @@ public:
 	bool chunkExists(const Vec3i& chunkPos) const { return getChunkPtr(chunkPos) != nullptr; }
 	bool chunkReady(const Vec3i& chunkPos) const { return chunkExists(chunkPos) && getChunkPtr(chunkPos)->ready(); }
 
-	void iterateChunks(const std::function<void(const Chunk*)>& func) const { for (auto& it: mChunks) func(it.second); }
+	void iterateChunks(const std::function<void(const Chunk*)>& func) const { for (const Chunk* c: mChunks) func(c); }
 	// Returns the first `count` chunks with the least weight
 	std::vector<const Chunk*> filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const;
 
-	void clearUpdated() {
-		for (auto& it: mChunks) it.second->clearUpdated();
-	}
+	void clearUpdated() { for (Chunk* c: mChunks) c->clearUpdated(); }
 
 	BlockData getBlock(const Vec3i& pos) const {
 		const Chunk* p = getChunkPtr(toChunkPos(pos));
@@ -47,8 +45,20 @@ public:
 	const Chunk* getChunkPtr(const Vec3i& chunkPos) const;
 
 private:
-	std::unordered_map<Vec3i, Chunk*> mChunks;
+	std::vector<Chunk*> mChunks;
 
+	int binarySearch(const Vec3i& chunkPos) const;
+	bool searchSuccessful(size_t result, const Vec3i& chunkPos) const {
+		return result < mChunks.size() && mChunks[result]->pos() == chunkPos;
+	}
+	void insertEntry(size_t index) {
+		mChunks.resize(mChunks.size() + 1);
+		for (size_t i = mChunks.size() - 1; i > index; i--) mChunks[i] = mChunks[i - 1];
+	}
+	void eraseEntry(size_t index) {
+		for (size_t i = index + 1; i < mChunks.size(); i++) mChunks[i - 1] = mChunks[i];
+		mChunks.resize(mChunks.size() - 1);
+	}
 	Chunk* getChunkPtr(const Vec3i& chunkPos);
 };
 

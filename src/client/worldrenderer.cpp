@@ -10,21 +10,26 @@ void WorldRenderer::update() {
 	}, mMaxUpdatesPerFrame);
 	for (auto& it: res) {
 		if (mCenterPos.chebyshevDistance(it->pos()) <= mRadius) {
-			mChunkVBOs[it->pos()] = ChunkRenderer(mWorld, it->pos()).buildRender();
+			VertexBuffer* vbo = new VertexBuffer(ChunkRenderer(mWorld, it->pos()).buildRender());
+			Vec3i pos = it->pos();
+			mChunkVBOs.set(it->pos(), vbo);
 		}
 	}
 }
 
 size_t WorldRenderer::render(const Vec3d& relativePos) const {
 	size_t res = 0;
-	for (auto& it: mChunkVBOs) {
-		if (mCenterPos.chebyshevDistance(it.first) <= mRadius) {
-			Vec3f translation = Vec3d(it.first) * Chunk::Size - relativePos;
-			Renderer::translate(translation);
-			it.second.render();
-			Renderer::translate(-translation);
-			res++;
+	Vec3i::range(-mRadius, mRadius, [this, &res, &relativePos](const Vec3i& pos) {
+		if (mCenterPos.chebyshevDistance(pos) <= mRadius) {
+			const VertexBuffer* curr = mChunkVBOs.get(pos);
+			if (curr != nullptr) {
+				Vec3f translation = Vec3d(pos) * Chunk::Size - relativePos;
+				Renderer::translate(translation);
+				curr->render();
+				Renderer::translate(-translation);
+				res++;
+			}
 		}
-	}
+	});
 	return res;
 }
