@@ -9,7 +9,8 @@ class ChunkRenderer {
 public:
 	ChunkRenderer(const World& world, const Vec3i& pos): mWorld(world), mPos(pos) {}
 
-	VertexBuffer buildRender();
+	// Returns (success, vbo)
+	std::pair<bool, VertexBuffer> buildRender();
 
 private:
 	const World& mWorld;

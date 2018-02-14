@@ -118,9 +118,9 @@ private:
 class VertexBuffer {
 public:
 	VertexBuffer(): id(0), vertexes(0) {}
-	VertexBuffer(VertexBuffer&& r): id(r.id), vertexes(r.vertexes), format(r.format) {}
-	VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
-		id(id_), vertexes(vertexes_), format(format_) {}
+	VertexBuffer(VertexBuffer&& r): id(0), vertexes(0) { swap(r); }
+	/*VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
+		id(id_), vertexes(vertexes_), format(format_) {}*/
 	explicit VertexBuffer(const VertexArray& va, bool staticDraw = true);
 	~VertexBuffer() { destroy(); }
 
@@ -130,7 +130,13 @@ public:
 	}
 
 	// Is empty
-	bool empty() const { return id == 0; }
+	bool empty() const {
+		if (id == 0) {
+			Assert(vertexes == 0);
+			return true;
+		}
+		return false;
+	}
 	// Upload new data
 	void update(const VertexArray& va, bool staticDraw = true);
 	// Swap
@@ -143,7 +149,7 @@ public:
 	void render() const;
 	// Destroy vertex buffer
 	void destroy() {
-		if (id != 0) {
+		if (!empty()) {
 			glDeleteBuffersARB(1, &id);
 			vertexes = id = 0;
 		}

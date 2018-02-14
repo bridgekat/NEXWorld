@@ -19,10 +19,15 @@ public:
 	T lengthSqr() const { return x * x + y * y + z * z; }
 	T length() const { return std::sqrt(lengthSqr()); }
 
-	T euclideanDistance(const Vec3& rhs) const { return (*this - rhs).length(); }
-	T chebyshevDistance(const Vec3& rhs) const { return Max(Max(Abs(x - rhs.x), Abs(y - rhs.y)), Abs(z - rhs.z)); }
-	T manhattanDistance(const Vec3& rhs) const { return Abs(x - rhs.x) + Abs(y - rhs.y) + Abs(z - rhs.z); }
+	//T euclideanDistance(const Vec3& rhs) const { return (*this - rhs).length(); }
+	//T chebyshevDistance(const Vec3& rhs) const { return Max(Max(Abs(x - rhs.x), Abs(y - rhs.y)), Abs(z - rhs.z)); }
+	//T manhattanDistance(const Vec3& rhs) const { return Abs(x - rhs.x) + Abs(y - rhs.y) + Abs(z - rhs.z); }
 	Vec3 normalize() { return (*this) / length(); }
+	bool inRange(T radius, const Vec3& rhs) const {
+		return rhs.x >= x - radius && rhs.x < x + radius &&
+			   rhs.y >= y - radius && rhs.y < y + radius &&
+			   rhs.z >= z - radius && rhs.z < z + radius;
+	}
 
 	Vec3& operator+= (const Vec3& rhs) {
 		x += rhs.x;
@@ -99,8 +104,8 @@ public:
 
 private:
 	// Solve strange problem caused by std::max & std::abs ...?
-	static T Max(T l, T r) { return l > r ? l : r; }
-	static T Abs(T x) { return x >= T(0) ? x : -x; }
+	//static T Max(T l, T r) { return l > r ? l : r; }
+	//static T Abs(T x) { return x >= T(0) ? x : -x; }
 };
 
 using Vec3i = Vec3<int>;

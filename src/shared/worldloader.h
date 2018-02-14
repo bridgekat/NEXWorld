@@ -15,7 +15,7 @@ public:
 	// Returns set of pair(distSqr, chunkPos)
 	std::set<std::pair<int, Vec3i> > getLoadSequence() const {
 		std::set<std::pair<int, Vec3i> > res;
-		Vec3i::range(mCenter - Vec3i(mRadius), mCenter + Vec3i(mRadius), [&] (const Vec3i& curr) {
+		Vec3i::range(mCenter - mRadius, mCenter + mRadius, [&](const Vec3i& curr) {
 			if (!mWorld.chunkExists(curr)) {
 				res.insert(std::make_pair((curr - mCenter).lengthSqr(), curr));
 				if (res.size() > mMaxLoadsPerUpdate) res.erase(*res.rbegin());

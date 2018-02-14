@@ -8,9 +8,12 @@
 #include "vec.h"
 #include "chunk.h"
 #include "logger.h"
+#include "arraymap.h"
 
 class World {
 public:
+	World(int cacheRadius = 0): mChunks(), mCachedChunkPtrs(cacheRadius * 2, Vec3i(0, 0, 0)) {}
+
 #ifndef NEXWORLD_COMPILER_RSHIFT_ARITH
 	static int toChunkPos(int pos) {
 		int res = pos / Chunk::Size;
@@ -33,7 +36,10 @@ public:
 	// Returns the first `count` chunks with the least weight
 	std::vector<const Chunk*> filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const;
 
-	void clearUpdated() { for (Chunk* c: mChunks) c->clearUpdated(); }
+	void clearUpdated(const Vec3i& chunkPos) {
+		Chunk* c = getChunkPtr(chunkPos);
+		if (c != nullptr) c->clearUpdated();
+	}
 
 	BlockData getBlock(const Vec3i& pos) const {
 		const Chunk* p = getChunkPtr(toChunkPos(pos));
@@ -46,6 +52,7 @@ public:
 
 private:
 	std::vector<Chunk*> mChunks;
+	mutable ArrayMap<Chunk*> mCachedChunkPtrs;
 
 	int binarySearch(const Vec3i& chunkPos) const;
 	bool searchSuccessful(size_t result, const Vec3i& chunkPos) const {

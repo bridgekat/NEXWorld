@@ -16,6 +16,7 @@ void World::addChunk(const Vec3i& pos) {
 	insertEntry(ind);
 	mChunks[ind] = new Chunk(pos);
 	mChunks[ind]->genTerrain();
+	mCachedChunkPtrs.set(pos, mChunks[ind]);
 }
 
 void World::deleteChunk(const Vec3i& pos) {
@@ -28,6 +29,7 @@ void World::deleteChunk(const Vec3i& pos) {
 	}
 	delete mChunks[ind];
 	eraseEntry(ind);
+	mCachedChunkPtrs.set(pos, nullptr);
 }
 
 std::vector<const Chunk*> World::filterChunks(const std::function<int(const Chunk*)>& getWeight, size_t count) const {
@@ -52,19 +54,23 @@ int World::binarySearch(const Vec3i& chunkPos) const {
 }
 
 const Chunk* World::getChunkPtr(const Vec3i& pos) const {
-//	const Chunk* c = mCPA.get(pos);
-//	if (c != nullptr) return c;
+	const Chunk* c = mCachedChunkPtrs.get(pos);
+	if (c != nullptr) return c;
+
 	size_t ind = binarySearch(pos);
 	if (!searchSuccessful(ind, pos)) return nullptr;
-//	mCPA.set(pos, mChunks[ind]);
+
+	mCachedChunkPtrs.set(pos, mChunks[ind]);
 	return mChunks[ind];
 }
 
 Chunk* World::getChunkPtr(const Vec3i& pos) {
-	//	const Chunk* c = mCPA.get(pos);
-	//	if (c != nullptr) return c;
+	Chunk* c = mCachedChunkPtrs.get(pos);
+	if (c != nullptr) return c;
+
 	size_t ind = binarySearch(pos);
 	if (!searchSuccessful(ind, pos)) return nullptr;
-	//	mCPA.set(pos, mChunks[ind]);
+
+	mCachedChunkPtrs.set(pos, mChunks[ind]);
 	return mChunks[ind];
 }

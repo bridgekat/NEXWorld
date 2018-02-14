@@ -8,7 +8,7 @@
 
 class WorldRenderer {
 public:
-	WorldRenderer(const World& world, int radius, const Vec3i& centerPos):
+	WorldRenderer(World& world, int radius, const Vec3i& centerPos):
 		mWorld(world), mRadius(radius), mCenterPos(centerPos), mChunkVBOs(mRadius * 2, mCenterPos) {
 		mMaxUpdatesPerFrame = Config::getInt("WorldRenderer.MaxUpdatesPerFrame", 4);
 	}
@@ -21,7 +21,7 @@ public:
 	}
 
 private:
-	const World& mWorld;
+	World& mWorld;
 	int mRadius;
 	Vec3i mCenterPos;
 	ArrayMap<VertexBuffer*> mChunkVBOs;

@@ -51,9 +51,9 @@ public:
 		Player player;
 
 		// Test world
-		World world;
-		WorldLoader loader(world, 4, Vec3i(0, 0, 0));
-		WorldRenderer worldRenderer(world, 4, Vec3i(0, 0, 0));
+		World world(9);
+		WorldLoader loader(world, 9, Vec3i(0, 0, 0));
+		WorldRenderer worldRenderer(world, 8, Vec3i(0, 0, 0));
 
 		// Test texture
 		TextureImage image("../Textures/untitled.png");
@@ -74,14 +74,23 @@ public:
 			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 1000.0f);
 			Renderer::setProjection(camera.getProjectionMatrix());
 			Renderer::setModelview(camera.getModelViewMatrix());
-			worldRenderer.render(player.position());
+			size_t renderedChunks = worldRenderer.render(player.position());
+			size_t loadedChunks = 0, updatedChunks = 0;
+
+			world.iterateChunks([&loadedChunks, &updatedChunks](const Chunk* c) {
+				loadedChunks++;
+				if (c->ready() && c->updated()) updatedChunks++;
+			});
+
+			std::stringstream ss;
+			ss << loadedChunks << " chunks loaded, " << updatedChunks << " chunks updated, " << renderedChunks << " chunks rendered";
+			//LogVerbose(ss.str());
 
 			//drawExampleGUI(win);
 
 			win.pollEvents();
 			player.update(win);
 			worldRenderer.update();
-			world.clearUpdated();
 			std::set<std::pair<int, Vec3i> > res = loader.getLoadSequence();
 			for (auto& it: res) world.addChunk(it.second);
 
