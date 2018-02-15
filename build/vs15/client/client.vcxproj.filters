@@ -52,6 +52,9 @@
     <ClCompile Include="..\..\..\src\client\texture.cpp">
       <Filter>Source Files\Renderer\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\client\blocktexture.cpp">
+      <Filter>Source Files\Renderer\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h">

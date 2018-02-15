@@ -62,7 +62,9 @@ public:
 
 		// Test texture
 		TextureImage image("../Textures/untitled.png");
-		Texture tex(image, false, -1);
+		TextureImage image2(32, 32, 4);
+		image2.copyFrom(image.convert(4), 0, 0);
+		Texture tex(image2, false, -1);
 
 		Renderer::setClearColor(Vec3f(0.7f, 0.85f, 0.95f));
 		Renderer::enableTexture2D();
