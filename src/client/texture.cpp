@@ -37,7 +37,6 @@ void TextureImage::loadFromPNG(const std::string& filename, bool checkSize) {
 	}
 
 	SDL_FreeSurface(surface);
-	mLoaded = true;
 }
 
 void TextureImage::copyFrom(const TextureImage& src, int x, int y, int srcx, int srcy) {
@@ -106,8 +105,8 @@ TextureImage TextureImage::shrink(int scale) const {
 
 TextureImage TextureImage::resample(int width, int height) const {
 	TextureImage res(width, height, mBytesPerPixel);
-	for (int i = 0; i < width; i++)
-		for (int j = 0; j < height; j++)
+	for (int i = 0; i < height; i++)
+		for (int j = 0; j < width; j++)
 			for (int k = 0; k < mBytesPerPixel; k++) {
 				// TODO: use AABB to calculate an average color on destination area
 				int i1 = int(double(i) / height * mHeight), j1 = int(double(j) / width * mWidth);
@@ -132,7 +131,11 @@ void Build2DMipmaps(const TextureImage& image, TextureFormat format, int level) 
 	}
 }
 
-Texture::Texture(const TextureImage& image, bool alpha, int maxLevels) {
+void Texture::load(const TextureImage& image, bool alpha, int maxLevels) {
+	if (image.data() == nullptr) {
+		LogWarning("Skipping empty texture image");
+		return;
+	}
 	Assert(image.bytesPerPixel() == 3 || image.bytesPerPixel() == 4);
 	if (maxLevels < 0) maxLevels = (int)log2(image.width());
 	TextureFormat format = alpha ? TextureFormatRGBA : TextureFormatRGB;

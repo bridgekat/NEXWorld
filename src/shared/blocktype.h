@@ -2,6 +2,8 @@
 #define BLOCKTYPE_H_
 
 #include <string>
+#include <vector>
+#include <algorithm>
 
 class BlockType {
 public:
@@ -15,11 +17,23 @@ public:
 	bool translucent() { return mTranslucent; }
 	bool opaque() { return mOpaque; }
 	int hardness() { return mHardness; }
+	bool operator< (const BlockType& r) const { return mInternalName < r.mInternalName; }
+
+	// Static part: BlockType container
+
+	static void preInit() { mBlockTypes.clear(); }
+	static void registerBlock(const BlockType& blockType) { mBlockTypes.push_back(blockType); }
+	static void postInit() { std::sort(mBlockTypes.begin(), mBlockTypes.end()); }
+
+	static int getIDByName(const std::string& internalName);
+	static const BlockType& getBlockType(int id);
 
 private:
 	std::string mName, mInternalName;
 	bool mSolid, mTranslucent, mOpaque;
 	int mHardness;
+
+	static std::vector<BlockType> mBlockTypes;
 };
 
 #endif

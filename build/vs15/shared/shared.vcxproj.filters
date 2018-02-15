@@ -129,5 +129,8 @@
     <ClCompile Include="..\..\..\src\shared\updatescheduler.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\shared\blocktype.cpp">
+      <Filter>Source Files\Game\Block</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

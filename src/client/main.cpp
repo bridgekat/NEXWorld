@@ -3,12 +3,14 @@
 #include <world.h>
 #include <worldloader.h>
 #include <updatescheduler.h>
+#include <blocktype.h>
 #include "window.h"
 #include "renderer.h"
 #include "worldrenderer.h"
 #include "gui.h"
 #include "player.h"
 #include "texture.h"
+#include "blocktexture.h"
 
 void drawExampleGUI(const Window& win) {
 	GUI::Form form;
@@ -34,7 +36,6 @@ class orld {
 public:
 	orld() {
 		LogInfo(LogInfoString);
-		nwLog("gg");
 
 		// Test config
 		Config::load();
@@ -43,12 +44,22 @@ public:
 		Window& win = Window::getDefaultWindow("", 852, 480);
 		Renderer::init();
 
-		// Test plugins
+		// Test game & plugins
 		Plugin::loadAll(PluginPath, true);
+		// Pre-init
+		BlockType::preInit();
+		BlockTexture::preInit();
 		Plugin::preInit();
-		Plugin::postInit();
+		// Post-init
+		BlockType::postInit();
 
-		// Test game
+		BlockTexture::registerTexture("../Textures/untitled.png");
+		BlockTexture::registerTexture("../Textures/untitled.png");
+		BlockTexture::registerTexture("../Textures/untitled.png");
+
+		BlockTexture::postInit();
+		Plugin::postInit();
+		// Game update control
 		UpdateCounter::init();
 		UpdateScheduler scheduler(30);
 
@@ -61,14 +72,15 @@ public:
 		WorldRenderer worldRenderer(world, 4, Vec3i(0, 0, 0));
 
 		// Test texture
-		TextureImage image("../Textures/untitled.png");
-		TextureImage image2(32, 32, 4);
-		image2.copyFrom(image.convert(4), 0, 0);
-		Texture tex(image2, false, -1);
+		//TextureImage image("../Textures/untitled.png");
+		//TextureImage image2(32, 32, 4);
+		//image2.copyFrom(image.convert(4), 0, 0);
+		//Texture tex(image2, false, -1);
+		BlockTexture::bind();
 
 		Renderer::setClearColor(Vec3f(0.7f, 0.85f, 0.95f));
 		Renderer::enableTexture2D();
-		tex.bind();
+		//tex.bind();
 
 		win.lockCursor();
 

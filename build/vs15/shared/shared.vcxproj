@@ -157,6 +157,7 @@
     <ClInclude Include="..\..\..\src\shared\worldloader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\shared\blocktype.cpp" />
     <ClCompile Include="..\..\..\src\shared\config.cpp" />
     <ClCompile Include="..\..\..\src\shared\filesystem.cpp" />
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
