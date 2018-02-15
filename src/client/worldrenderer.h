@@ -26,6 +26,7 @@ private:
 	World& mWorld;
 	int mRadius;
 	Vec3i mCenterPos;
+	// TODO: change pointers to VertexBuffer objects
 	ArrayMap<std::pair<UpdateCount, VertexBuffer*> > mChunkVBOs;
 
 	size_t mMaxUpdatesPerFrame;

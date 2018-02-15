@@ -2,6 +2,7 @@
 #include <pluginapi.h>
 #include <world.h>
 #include <worldloader.h>
+#include <updatescheduler.h>
 #include "window.h"
 #include "renderer.h"
 #include "worldrenderer.h"
@@ -49,35 +50,43 @@ public:
 
 		// Test game
 		UpdateCounter::init();
+		UpdateScheduler scheduler(30);
 
 		// Test player
 		Player player;
 
 		// Test world
-		World world(9);
-		WorldLoader worldLoader(world, 9, Vec3i(0, 0, 0));
-		WorldRenderer worldRenderer(world, 8, Vec3i(0, 0, 0));
+		World world(5);
+		WorldLoader worldLoader(world, 5, Vec3i(0, 0, 0));
+		WorldRenderer worldRenderer(world, 4, Vec3i(0, 0, 0));
 
 		// Test texture
 		TextureImage image("../Textures/untitled.png");
 		Texture tex(image, false, -1);
 
+		Renderer::setClearColor(Vec3f(0.7f, 0.85f, 0.95f));
 		Renderer::enableTexture2D();
 		tex.bind();
 
 		win.lockCursor();
 
+		scheduler.sync();
+
 		while (!win.shouldQuit()) {
 			Renderer::waitForComplete();
 			win.swapBuffers();
 
+			// Render
+			double interp = scheduler.delta();
+
 			Renderer::setViewport(0, 0, win.getWidth(), win.getHeight());
 			Renderer::clear();
 
+			player.updateRotation(win);
 			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 1000.0f);
 			Renderer::setProjection(camera.getProjectionMatrix());
 			Renderer::setModelview(camera.getModelViewMatrix());
-			size_t renderedChunks = worldRenderer.render(player.position());
+			size_t renderedChunks = worldRenderer.render(player.interpolatedPosition(interp));
 			size_t loadedChunks = 0, updatedChunks = 0;
 
 			world.iterateChunks([&loadedChunks, &updatedChunks](const Chunk* c) {
@@ -87,29 +96,33 @@ public:
 
 			std::stringstream ss;
 			ss << loadedChunks << " chunks loaded, " << updatedChunks << " chunks updated, " << renderedChunks << " chunks rendered";
-			LogVerbose(ss.str());
+			//LogVerbose(ss.str());
 
 			//drawExampleGUI(win);
 
 			win.pollEvents();
 
-			// Game update
-			UpdateCounter::increase();
-
+			// Render update
 			worldRenderer.update();
 
-			player.update(win);
-			Vec3i playerChunkPos = World::toChunkPos(Vec3i(player.position()));
+			// Game update
+			scheduler.refresh();
+			while (!scheduler.inSync()) {
+				player.update();
 
-			world.setCacheCenter(playerChunkPos);
-			worldLoader.setCenter(playerChunkPos);
-			worldRenderer.setCenter(playerChunkPos);
+				Vec3i playerChunkPos = World::toChunkPos(Vec3i(player.position()));
 
-			auto loads = worldLoader.getLoadSequence();
-			for (auto& it: loads) world.addChunk(it.second);
+				world.setCacheCenter(playerChunkPos);
+				worldLoader.setCenter(playerChunkPos);
+				worldRenderer.setCenter(playerChunkPos);
 
-			auto unloads = worldLoader.getUnloadSequence();
-			for (auto& it: unloads) world.deleteChunk(it.second);
+				auto loads = worldLoader.getLoadSequence();
+				for (auto& it : loads) world.addChunk(it.second);
+				auto unloads = worldLoader.getUnloadSequence();
+				for (auto& it : unloads) world.deleteChunk(it.second);
+
+				scheduler.increase();
+			}
 
 			if (Window::isKeyPressed(SDL_SCANCODE_ESCAPE)) break;
 		}

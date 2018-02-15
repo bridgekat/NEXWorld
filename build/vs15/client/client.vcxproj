@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\..\src\client\worldrenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\client\blocktexture.h" />
     <ClInclude Include="..\..\..\src\client\camera.h" />
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
     <ClInclude Include="..\..\..\src\client\gui.h" />

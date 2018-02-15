@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\..\src\shared\plugin.cpp" />
     <ClCompile Include="..\..\..\src\shared\pluginapi.cpp" />
     <ClCompile Include="..\..\..\src\shared\updatecounter.cpp" />
+    <ClCompile Include="..\..\..\src\shared\updatescheduler.cpp" />
     <ClCompile Include="..\..\..\src\shared\world.cpp" />
     <ClCompile Include="..\..\..\src\shared\worldgen.cpp" />
   </ItemGroup>

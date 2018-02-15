@@ -84,5 +84,8 @@
     <ClInclude Include="..\..\..\src\client\texture.h">
       <Filter>Source Files\Renderer\Textures</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\client\blocktexture.h">
+      <Filter>Source Files\Renderer\Textures</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

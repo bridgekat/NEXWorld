@@ -13,6 +13,8 @@ public:
 
 	Vec3d position() const { return mPosition; }
 	Vec3d rotation() const { return mRotation; }
+	Vec3d interpolatedPosition(double factor) const { return mPrevPosition * (1.0f - factor) + mPosition * factor; }
+	Vec3d interpolatedRotation(double factor) const { return mPrevRotation * (1.0f - factor) + mRotation * factor; }
 
 	void move(const Vec3d& d) { mSpeed += d; }
 	void rotate(const Vec3d& d) { mRotateSpeed += d; }
@@ -27,6 +29,8 @@ public:
 	}
 
 	virtual void update() {
+		mPrevPosition = mPosition;
+		mPrevRotation = mRotation;
 		mPosition += mSpeed;
 		mRotation += mRotateSpeed;
 	}
@@ -35,6 +39,7 @@ protected:
 	// Transformation order: x, y, z, heading, pitch, yaw
 	Vec3d mPosition, mRotation;
 	Vec3d mSpeed, mRotateSpeed;
+	Vec3d mPrevPosition, mPrevRotation;
 };
 
 #endif

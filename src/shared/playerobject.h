@@ -13,7 +13,7 @@ public:
 	}
 
 private:
-	//std::string name;
+	//std::string mName;
 };
 
 #endif
