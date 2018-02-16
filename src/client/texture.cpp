@@ -70,7 +70,7 @@ TextureImage TextureImage::convert(int bytesPerPixel) const {
 		for (int j = 0; j < mWidth; j++) {
 			unsigned char* p = res.mData + i * res.mPitch + j * res.mBytesPerPixel;
 			unsigned char* pSrc = mData + i * mPitch + j * mBytesPerPixel;
-			unsigned char r = 0, g = 0, b = 0, a = 0;
+			unsigned char r = 0, g = 0, b = 0, a = 255u;
 			if (mBytesPerPixel == 4) r = pSrc[0], g = pSrc[1], b = pSrc[2], a = pSrc[3];
 			else r = r = pSrc[0], g = pSrc[1], b = pSrc[2];
 			if (res.mBytesPerPixel == 4) p[0] = r, p[1] = g, p[2] = b, p[3] = a;

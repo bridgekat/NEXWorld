@@ -1,18 +1,29 @@
 #include <pluginapi.h>
+#include "block.h"
 #include "worldgen.h"
+#include "blockrenderer.h"
 
 NWplugindata data;
 
-NWAPIEXPORT const NWplugindata* NWAPICALL Info() {
+const NWplugindata* NWAPICALL Info() {
 	data.pluginType = NWPluginTypeShared;
-	data.internalName = "infinideas.nexworld.main";
+	data.internalName = "infinideas.nexworldgame";
 	data.pluginName = "NEXWorldGame";
 	data.authorName = "INFINIDEAS";
 	return &data;
 }
 
-NWAPIEXPORT int NWAPICALL PreInit() {
+int NWAPICALL PreInit() {
 	nwLog("PreInit!");
-	nwRegisterChunkGenerator(WorldGen::generator);
+	nwRegisterChunkGenerator(&WorldGen::generator);
+	Block::registerBlocks();
+	BlockRenderer::registerTextures();
+	return 0;
+}
+
+int NWAPICALL PostInit() {
+	nwLog("PostInit!");
+	Block::initIDs();
+	BlockRenderer::registerBlockModels();
 	return 0;
 }

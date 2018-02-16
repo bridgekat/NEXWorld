@@ -1,15 +1,58 @@
 #ifndef PLUGINAPI_H_
 #define PLUGINAPI_H_
 
-// NEARLY "NEWorld-compatible" APIs 23333333
-
-#include "common.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// NEXWorld constants
+///// Preprocessor /////
+
+// Platform
+#ifdef _MSC_VER
+#	define NEXWORLD_COMPILER_MSVC
+#endif
+
+#ifdef _WIN32
+#	define NEXWORLD_TARGET_WINDOWS
+#elif defined __MACOSX__ || (defined __APPLE__ && defined __GNUC__)
+#	define NEXWORLD_TARGET_MACOSX
+#	define NEXWORLD_TARGET_POSIX
+#else
+#	define NEXWORLD_TARGET_LINUX
+#	define NEXWORLD_TARGET_POSIX
+#endif
+
+// NWAPICALL
+#ifdef NEXWORLD_COMPILER_MSVC
+#	define NWAPICALL __cdecl
+#elif defined(__i386__) || defined(__i386)
+#	define NWAPICALL __attribute__((__cdecl__))
+#else
+#	undef NWAPICALL
+#	define NWAPICALL
+#endif
+
+// NWAPIENTRY
+#ifdef NEXWORLD_TARGET_WINDOWS
+#	ifdef NEXWORLD_COMPILER_MSVC
+#		define NWAPIIMPORT __declspec(dllimport)
+#		define NWAPIEXPORT __declspec(dllexport)
+#	else
+#		define NWAPIIMPORT __attribute__((dllimport))
+#		define NWAPIEXPORT __attribute__((dllexport))
+#	endif
+#else
+#	define NWAPIIMPORT __attribute__((visibility("default")))
+#	define NWAPIEXPORT __attribute__((visibility("default")))
+#endif
+
+#ifdef NEXWORLD_PLUGIN_API_IMPL
+#	define NWAPIENTRY NWAPIEXPORT
+#else
+#	define NWAPIENTRY NWAPIIMPORT
+#endif
+
+///// Constants /////
 
 enum {
 	NWPluginTypeClientOnly,
@@ -20,7 +63,7 @@ enum {
 const int NWChunkSize = 32;
 const int NWAirID = 0;
 
-// NEXWorld structures
+///// Structures /////
 
 struct NWplugindata {
 	const char* pluginName;
@@ -43,37 +86,49 @@ struct NWblockdata {
 struct NWblocktype {
 	const char* name;
 	const char* internalName;
-	bool solid;
-	bool translucent;
-	bool opaque;
 	int hardness;
+	bool solid;
+	bool opaque;
+	bool visible;
+	bool translucent;
 };
 
-// Shared APIs
-
+typedef unsigned int NWblockid;
 typedef void NWAPICALL NWchunkgenerator(const NWvec3i*, NWblockdata*);
 
-NWAPIENTRY void NWAPICALL nwLog(const char* s);
-NWAPIENTRY int NWAPICALL nwRegisterChunkGenerator(NWchunkgenerator* const generator);
+#ifdef NEXWORLD_PLUGIN_API_CLIENT
 
-// Client-only APIs
+typedef unsigned int NWtextureid;
 
-#ifdef NEXWORLD_PLUGIN_CLIENT_SIDE
-
-typedef size_t NWtextureid;
-typedef void(*NWblockrenderfunc)(void* cthis, NWblockdata data, int x, int y, int z);
-
-struct NWblocktexture {
-	NWtextureid right, left, top, bottom, front, back;
+struct NWvertex {
+	NWtextureid tex;
+	float u, v, nx, ny, nz, x, y, z;
 };
-
-NWAPIENTRY NWtextureid NWAPICALL nwRegisterTexture(const char* filename);
-NWAPIENTRY void NWAPICALL nwSetBlockRenderFunc(size_t id, NWblockrenderfunc func);
-NWAPIENTRY void NWAPICALL nwUseDefaultBlockRenderFunc(size_t id, void* data);
 
 #endif
 
-// Plugin exported functions
+///// APIs /////
+
+// Pre-init
+
+NWAPIENTRY void NWAPICALL nwLog(const char* s);
+NWAPIENTRY void NWAPICALL nwRegisterBlockType(const NWblocktype* blocktype);
+NWAPIENTRY int NWAPICALL nwRegisterChunkGenerator(NWchunkgenerator* const generator);
+#ifdef NEXWORLD_PLUGIN_API_CLIENT
+NWAPIENTRY NWtextureid NWAPICALL nwRegisterTexture(const char* filename);
+#endif
+
+// Post-init
+
+NWAPIENTRY int NWAPICALL nwGetBlockIDByName(const char* internalname);
+#ifdef NEXWORLD_PLUGIN_API_CLIENT
+NWAPIENTRY void NWAPICALL nwRegisterBlockModel(NWblockid id, int count, const NWvertex* vertices,
+		bool rightFull, bool leftFull, bool topFull, bool bottomFull, bool frontFull, bool backFull);
+#endif
+
+// In-game
+
+///// Plugin exported functions /////
 
 NWAPIEXPORT const NWplugindata* NWAPICALL Info();
 NWAPIEXPORT int NWAPICALL PreInit();

@@ -11,6 +11,7 @@
 #include "player.h"
 #include "texture.h"
 #include "blocktexture.h"
+#include "blockrenderer.h"
 
 void drawExampleGUI(const Window& win) {
 	GUI::Form form;
@@ -52,12 +53,8 @@ public:
 		Plugin::preInit();
 		// Post-init
 		BlockType::postInit();
-
-		BlockTexture::registerTexture("../Textures/untitled.png");
-		BlockTexture::registerTexture("../Textures/untitled.png");
-		BlockTexture::registerTexture("../Textures/untitled.png");
-
 		BlockTexture::postInit();
+		BlockRenderer::postInit();
 		Plugin::postInit();
 		// Game update control
 		UpdateCounter::init();
@@ -72,15 +69,12 @@ public:
 		WorldRenderer worldRenderer(world, 4, Vec3i(0, 0, 0));
 
 		// Test texture
-		//TextureImage image("../Textures/untitled.png");
-		//TextureImage image2(32, 32, 4);
-		//image2.copyFrom(image.convert(4), 0, 0);
-		//Texture tex(image2, false, -1);
 		BlockTexture::bind();
 
 		Renderer::setClearColor(Vec3f(0.7f, 0.85f, 0.95f));
 		Renderer::enableTexture2D();
-		//tex.bind();
+		Renderer::enableAlphaTest();
+		//Renderer::enableBlend();
 
 		win.lockCursor();
 

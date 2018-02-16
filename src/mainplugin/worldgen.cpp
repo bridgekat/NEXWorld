@@ -1,5 +1,6 @@
 #include "math.h"
 #include "worldgen.h"
+#include "block.h"
 
 int WorldGen::seed = 2333;
 double WorldGen::NoiseScaleX = 64;
@@ -35,16 +36,22 @@ double WorldGen::PerlinNoise2D(double x, double y) {
 void NWAPICALL WorldGen::generator(const NWvec3i* pos, NWblockdata* blocks) {
 	for (int x = 0; x < NWChunkSize; x++)
 		for (int z = 0; z < NWChunkSize; z++) {
-			int height = WorldGen::getHeight(pos->x * NWChunkSize + x, pos->z * NWChunkSize + z) - pos->y * NWChunkSize;
+			int terrHeight = WorldGen::getHeight(pos->x * NWChunkSize + x, pos->z * NWChunkSize + z);
 			for (int y = 0; y < NWChunkSize; y++) {
+				int height = pos->y * NWChunkSize + y;
 				NWblockdata &block = blocks[x * NWChunkSize * NWChunkSize + y * NWChunkSize + z];
-				if (y <= height) {
-					block.id = 1;
-					block.state = 0;
+				if (terrHeight < 3) {
+					if (height <= terrHeight - 5) block.id = Block::Rock;
+					else if (height <= terrHeight) block.id = Block::Sand;
+					else if (height <= 0) block.id = Block::Water;
+					else block.id = NWAirID;
 				} else {
-					block.id = NWAirID;
-					block.state = 0;
+					if (height <= terrHeight - 5) block.id = Block::Rock;
+					else if (height <= terrHeight - 1) block.id = Block::Dirt;
+					else if (height <= terrHeight) block.id = Block::Grass;
+					else block.id = NWAirID;
 				}
+				block.state = 0;
 			}
 		}
 }

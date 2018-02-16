@@ -1,4 +1,5 @@
 #include "pluginapi.h"
+#include <sstream>
 #include "logger.h"
 #include "worldgen.h"
 #include "chunk.h"
@@ -10,18 +11,18 @@ namespace PluginAPI {
 	std::string currPluginName;
 
 	BlockData convertBlockData(const NWblockdata& src) { return BlockData(src.id, src.state); }
-	NWblockdata convertBlockData(const BlockData& src) { return NWblockdata{ src.id, src.state, 0, 0 }; }
-	BlockType convertBlockType(const NWblocktype& src) { return BlockType(src.name, src.internalName, src.solid, src.translucent, src.opaque, src.hardness); }
+	NWblockdata convertBlockData(const BlockData& src) { return NWblockdata{ src.id, src.state, src.blocklight, src.skylight }; }
+	BlockType convertBlockType(const NWblocktype& src) { return BlockType(src.name, src.internalName, src.hardness, src.solid, src.opaque, src.visible, src.translucent); }
 }
 
 extern "C" {
 
-	NWAPIEXPORT void NWAPICALL nwLog(const char* s) {
+	void NWAPICALL nwLog(const char* s) {
 		LogInfo("[" + PluginAPI::currPluginName + "]" + std::string(s));
 	}
 
-	NWAPIEXPORT int NWAPICALL nwRegisterChunkGenerator(NWchunkgenerator* const generator) {
-		LogInfo("[Plugin]" + PluginAPI::currPluginName + " Registered chunk generator");
+	int NWAPICALL nwRegisterChunkGenerator(NWchunkgenerator* const generator) {
+		LogInfo("[Plugin]" + PluginAPI::currPluginName + " registered chunk generator");
 		WorldGen::generator = [generator](const Vec3i& pos, BlockData* blocks) {
 			NWblockdata* tmp = new NWblockdata[Chunk::Size * Chunk::Size * Chunk::Size];
 			NWvec3i tmpPos{ pos.x, pos.y, pos.z };
@@ -33,6 +34,21 @@ extern "C" {
 			delete[] tmp;
 		};
 		return 0;
+	}
+
+	void NWAPICALL nwRegisterBlockType(const NWblocktype* blockType) {
+		BlockType block = PluginAPI::convertBlockType(*blockType);
+		std::stringstream ss;
+		ss << "[Plugin]" + PluginAPI::currPluginName << " registered block " << block.name() << "[" << block.internalName() << "] with hardness " << block.hardness() << ", attributes:";
+		if (block.solid()) ss << " solid";
+		if (block.translucent()) ss << " translucent";
+		if (block.opaque()) ss << " opaque";
+		LogInfo(ss.str());
+		BlockType::registerBlock(block);
+	}
+
+	int NWAPICALL nwGetBlockIDByName(const char* name) {
+		return BlockType::getIDByName(std::string(name));
 	}
 
 }

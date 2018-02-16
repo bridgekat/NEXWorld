@@ -15,12 +15,16 @@ public:
 	TextureCoord() = default;
 	TextureCoord(float u0_, float v0_, float u1_, float v1_):
 		u0(u0_), v0(v0_), u1(u1_), v1(v1_) {}
+
+	std::pair<float, float> map(float u, float v) const {
+		return std::make_pair((1.0f - u) * u0 + u * u1, (1.0f - v) * v0 + v * v1);
+	}
 };
 
 class BlockTexture {
 public:
 	static void preInit() {
-		mUnitSize = Config::getInt("BlockTexture.UnitSize", 32);
+		mUnitSize = Config::getInt("BlockTexture.MaxUnitSize", 32);
 		mTexCoords.clear();
 		mTexImages.clear();
 	}
@@ -32,10 +36,10 @@ public:
 
 	static void postInit();
 
-	static TextureCoord& getTextureCoord(unsigned int id) {
+	static const TextureCoord& getTextureCoord(unsigned int id) {
 		if (id >= mTexCoords.size()) {
-			std::stringstream ss("Unable to locate block texture with ID ");
-			ss << id;
+			std::stringstream ss;
+			ss << "Unable to locate block texture with ID " << id;
 			LogWarning(ss.str());
 			// TODO: add a null block texture
 			return mTexCoords[0];

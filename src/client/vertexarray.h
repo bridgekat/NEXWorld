@@ -29,7 +29,7 @@ public:
 
 class VertexArray {
 public:
-	VertexArray(int maxVertexes, const VertexFormat& format):
+	VertexArray(unsigned int maxVertexes, const VertexFormat& format):
 		mMaxVertexes(maxVertexes), mVertexes(0), mFormat(format),
 		mData(new float[mMaxVertexes * format.vertexAttributeCount]),
 		mVertexAttributes(new float[format.vertexAttributeCount]) {}
@@ -81,6 +81,7 @@ public:
 	// Add vertex
 	void addVertex(const float* coords) {
 		auto cnt = mFormat.textureCount + mFormat.colorCount + mFormat.normalCount;
+		Assert(mVertexes * mFormat.vertexAttributeCount + cnt + 3 <= mMaxVertexes);
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount, mVertexAttributes, cnt * sizeof(float));
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount + cnt, coords, mFormat.coordinateCount * sizeof(float));
 		mVertexes++;
@@ -104,7 +105,7 @@ public:
 
 private:
 	// Max vertex count
-	const int mMaxVertexes;
+	const unsigned int mMaxVertexes;
 	// Vertex count
 	int mVertexes;
 	// Vertex array format

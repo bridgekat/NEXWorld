@@ -23,6 +23,9 @@
     <Filter Include="Source Files\Renderer\Textures">
       <UniqueIdentifier>{4f85004f-d371-4d26-a901-2828796f17e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Plugins">
+      <UniqueIdentifier>{190e71a8-e771-4b43-9014-5e77709d3539}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\client\main.cpp">
@@ -54,6 +57,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\client\blocktexture.cpp">
       <Filter>Source Files\Renderer\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\clientapi.cpp">
+      <Filter>Source Files\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\blockrenderer.cpp">
+      <Filter>Source Files\WorldRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +98,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\blocktexture.h">
       <Filter>Source Files\Renderer\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\blockrenderer.h">
+      <Filter>Source Files\WorldRenderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@
 #	define NEXWORLD_COMPILER_RSHIFT_ARITH
 #endif
 
-// NXAPICALL
+// NWAPICALL
 #ifdef NEXWORLD_COMPILER_MSVC
 #	define NWAPICALL __cdecl
 #elif defined(__i386__) || defined(__i386)
@@ -35,26 +35,6 @@
 #else
 #	undef NWAPICALL
 #	define NWAPICALL
-#endif
-
-// NXAPIENTRY
-#ifdef NEXWORLD_TARGET_WINDOWS
-#	ifdef NEXWORLD_COMPILER_MSVC
-#		define NWAPIIMPORT __declspec(dllimport)
-#		define NWAPIEXPORT __declspec(dllexport)
-#	else
-#		define NWAPIIMPORT __attribute__((dllimport))
-#		define NWAPIEXPORT __attribute__((dllexport))
-#	endif
-#else
-#	define NWAPIIMPORT __attribute__((visibility("default")))
-#	define NWAPIEXPORT __attribute__((visibility("default")))
-#endif
-
-#ifdef NEXWORLD_PLUGIN
-#	define NWAPIENTRY NWAPIIMPORT
-#else
-#	define NWAPIENTRY NWAPIEXPORT
 #endif
 
 constexpr const char* RootPath = "../";
