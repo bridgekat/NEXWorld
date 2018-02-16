@@ -116,7 +116,8 @@ public:
 			// Game update
 			scheduler.refresh();
 			while (!scheduler.inSync()) {
-				player.update();
+				UpdateCounter::increase();
+				player.update(win, world);
 
 				Vec3i playerChunkPos = World::toChunkPos(Vec3i(player.position()));
 

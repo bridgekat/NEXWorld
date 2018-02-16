@@ -43,6 +43,19 @@ std::vector<const Chunk*> World::filterChunks(const std::function<int(const Chun
 	return res;
 }
 
+void World::setBlock(const Vec3i& pos, BlockData block) {
+	Chunk* p = getChunkPtr(toChunkPos(pos));
+	if (p == nullptr || !p->ready()) return;
+	p->setBlock(toBlockPos(pos), block);
+	for (int x = -1; x <= 1; x++)
+		for (int y = -1; y <= 1; y++)
+			for (int z = -1; z <= 1; z++) {
+				Vec3i chunkPos = toChunkPos(pos + Vec3i(x, y, z));
+				Chunk* c = getChunkPtr(chunkPos);
+				if (c != nullptr) c->setUpdated();
+			}
+}
+
 int World::binarySearch(const Vec3i& chunkPos) const {
 	int first = 0, last = int(mChunks.size()) - 1;
 	while (first <= last) {

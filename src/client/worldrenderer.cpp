@@ -24,7 +24,6 @@ void WorldRenderer::update() {
 			if (buildResult.first) {
 				VertexBuffer* prev = mChunkVBOs.get(it->pos()).second;
 				if (prev != nullptr) prev->destroy();
-
 				if (!buildResult.second.empty()) {
 					VertexBuffer* p = new VertexBuffer(std::move(buildResult.second));
 					mChunkVBOs.set(it->pos(), std::make_pair(UpdateCounter::curr(), p));

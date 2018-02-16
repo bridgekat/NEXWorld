@@ -42,6 +42,8 @@ public:
 		return p->getBlock(toBlockPos(pos));
 	}
 
+	void setBlock(const Vec3i& pos, BlockData block);
+
 	// Be careful! Return value might be nullptr.
 	const Chunk* getChunkPtr(const Vec3i& chunkPos) const;
 	// Optional optimization

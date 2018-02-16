@@ -30,6 +30,12 @@ public:
 		return mBlocks[getBlockIndex(pos)];
 	}
 
+	void setBlock(const Vec3i& pos, BlockData block) {
+		Assert(mReady);
+		mBlocks[getBlockIndex(pos)] = block;
+		//setUpdated();
+	}
+
 	static size_t getBlockIndex(const Vec3i& pos) {
 		Assert(pos.x >= 0 && pos.x < Size && pos.y >= 0 && pos.y < Size && pos.z >= 0 && pos.z < Size);
 		return pos.y * Size * Size + pos.x * Size + pos.z;

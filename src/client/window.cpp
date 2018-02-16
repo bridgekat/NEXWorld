@@ -64,16 +64,16 @@ void Window::pollEvents() {
 	// Absolute mode: motion = (mMouse.xy - mPrevMouse.xy), position = mMouse.xy
 	if (SDL_GetRelativeMouseMode() == SDL_TRUE) {
 		Uint32 buttons = SDL_GetRelativeMouseState(&mMouse.x, &mMouse.y);
-		mMouse.left = buttons | SDL_BUTTON_LEFT;
-		mMouse.right = buttons | SDL_BUTTON_RIGHT;
-		mMouse.mid = buttons | SDL_BUTTON_MIDDLE;
+		mMouse.left = buttons & SDL_BUTTON_LEFT;
+		mMouse.right = buttons & SDL_BUTTON_RIGHT;
+		mMouse.mid = buttons & SDL_BUTTON_MIDDLE;
 		mMouse.relative = true;
 	} else {
 		mPrevMouse = mMouse;
 		Uint32 buttons = SDL_GetMouseState(&mMouse.x, &mMouse.y);
-		mMouse.left = buttons | SDL_BUTTON_LEFT;
-		mMouse.right = buttons | SDL_BUTTON_RIGHT;
-		mMouse.mid = buttons | SDL_BUTTON_MIDDLE;
+		mMouse.left = buttons & SDL_BUTTON_LEFT;
+		mMouse.right = buttons & SDL_BUTTON_RIGHT;
+		mMouse.mid = buttons & SDL_BUTTON_MIDDLE;
 		if (mMouse.relative) mPrevMouse = mMouse;
 		mMouse.relative = false;
 	}

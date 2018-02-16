@@ -3,6 +3,7 @@
 
 #include <config.h>
 #include <playerobject.h>
+#include <world.h>
 #include "camera.h"
 #include "window.h"
 
@@ -11,7 +12,7 @@ public:
 	Player();
 
 	// Call every game update
-	void update();
+	void update(const Window& win, World& world);
 	// Call every frame, before world rendering (to improve mouse response)
 	void updateRotation(const Window& win) {
 		MouseState mouse = win.getMouseMotion();
@@ -28,6 +29,7 @@ public:
 
 private:
 	float mFOV, mMouseSensitivity;
+	double mSelectDistance, mSelectPrecision;
 	Uint8 mForwardKey, mBackwardKey, mLeftKey, mRightKey, mUpKey, mDownKey;
 };
 
