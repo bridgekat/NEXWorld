@@ -16,6 +16,7 @@ Player::Player(): PlayerObject() {
 
 void Player::update(const Window& win, World& world) {
 	MouseState mouse = win.getMouseMotion();
+	// TODO: let plugins handle keys?
 	if (mouse.left) {
 		Mat4f trans(1.0f);
 		trans *= Mat4f::rotation(float(mRotation.y), Vec3f(0.0f, 1.0f, 0.0f));

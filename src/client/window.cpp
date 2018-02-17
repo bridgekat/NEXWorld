@@ -19,11 +19,9 @@ Window::Window(const std::string& title, int width, int height):
 	mTitle(title), mWidth(width), mHeight(height) {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
 	IMG_Init(IMG_INIT_PNG);
-	SDL_GL_SetSwapInterval(0);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-
 #ifdef NEXWORLD_DEBUG
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 #endif
@@ -42,6 +40,8 @@ Window::Window(const std::string& title, int width, int height):
 		LogFatal("Failed to initialize GLEW!");
 		Assert(false);
 	}
+
+	SDL_GL_SetSwapInterval(0);
 
 #ifdef NEXWORLD_DEBUG
 	if (GLEW_ARB_debug_output) {

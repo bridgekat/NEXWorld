@@ -89,26 +89,14 @@ public:
 
 			Renderer::setViewport(0, 0, win.getWidth(), win.getHeight());
 			Renderer::clear();
-
+			win.pollEvents();
 			player.updateRotation(win);
 			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 1000.0f);
 			Renderer::setProjection(camera.getProjectionMatrix());
 			Renderer::setModelview(camera.getModelViewMatrix());
 			size_t renderedChunks = worldRenderer.render(player.interpolatedPosition(interp));
-			size_t loadedChunks = 0, updatedChunks = 0;
-
-			world.iterateChunks([&loadedChunks, &updatedChunks](const Chunk* c) {
-				loadedChunks++;
-				if (c->ready() && c->updatedSince(UpdateCounter::curr() - 1)) updatedChunks++;
-			});
-
-			std::stringstream ss;
-			ss << loadedChunks << " chunks loaded, " << updatedChunks << " chunks updated, " << renderedChunks << " chunks rendered";
-			//LogVerbose(ss.str());
 
 			//drawExampleGUI(win);
-
-			win.pollEvents();
 
 			// Render update
 			worldRenderer.update();
@@ -132,6 +120,18 @@ public:
 
 				scheduler.increase();
 			}
+
+			// Debug
+			/*
+			size_t loadedChunks = 0, updatedChunks = 0;
+			world.iterateChunks([&loadedChunks, &updatedChunks](const Chunk* c) {
+				loadedChunks++;
+				if (c->ready() && c->updatedSince(UpdateCounter::curr() - 1)) updatedChunks++;
+			});
+			std::stringstream ss;
+			ss << loadedChunks << " chunks loaded, " << updatedChunks << " chunks updated, " << renderedChunks << " chunks rendered";
+			LogVerbose(ss.str());
+			*/
 
 			if (Window::isKeyPressed(SDL_SCANCODE_ESCAPE)) break;
 		}
