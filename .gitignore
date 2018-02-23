@@ -5,6 +5,16 @@ include/*
 lib/*
 lib64/*
 
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# CLion
+.idea/
+*.cbp
+
 # Visual Studio build files
 build/**/.vs
 build/**/*.user
@@ -19,4 +29,3 @@ build/**/x64
 
 # Release directory
 release/*
-

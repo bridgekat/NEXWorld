@@ -47,6 +47,12 @@ void Filesystem::inDirectory(const std::string& path, std::function<void(std::st
 	FindClose(hFind);
 #else
 	auto pDir = opendir(path.c_str());
+	if (pDir == nullptr) {
+		std::stringstream ss;
+		ss << "Listing directory \"" + path + "\" failed";
+		LogWarning(ss.str());
+		return;
+	}
 	struct dirent *ent;
 	while ((ent = readdir(pDir)) != nullptr) {
 		if (ent->d_type & DT_DIR) continue;

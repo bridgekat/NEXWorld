@@ -1,7 +1,7 @@
 #ifndef MAT_H_
 #define MAT_H_
 
-#include <cassert>
+#include <cstring>
 #include <utility>
 #include "common.h"
 #include "debug.h"
@@ -91,7 +91,7 @@ public:
 
 	// Swap row r1, row r2
 	void swapRows(size_t r1, size_t r2) {
-		assert(r1 < 4 && r2 < 4);
+		Assert(r1 < 4 && r2 < 4);
 		std::swap(data[r1 * 4 + 0], data[r2 * 4 + 0]);
 		std::swap(data[r1 * 4 + 1], data[r2 * 4 + 1]);
 		std::swap(data[r1 * 4 + 2], data[r2 * 4 + 2]);
@@ -100,7 +100,7 @@ public:
 
 	// Row r *= k
 	void multRow(size_t r, T k) {
-		assert(r < 4);
+		Assert(r < 4);
 		data[r * 4 + 0] *= k;
 		data[r * 4 + 1] *= k;
 		data[r * 4 + 2] *= k;
@@ -109,7 +109,7 @@ public:
 
 	// Row dst += row src * k
 	void multAndAdd(size_t src, size_t dst, T k) {
-		assert(dst < 4 && src < 4);
+		Assert(dst < 4 && src < 4);
 		data[dst * 4 + 0] += data[src * 4 + 0] * k;
 		data[dst * 4 + 1] += data[src * 4 + 1] * k;
 		data[dst * 4 + 2] += data[src * 4 + 2] * k;

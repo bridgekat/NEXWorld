@@ -59,7 +59,7 @@ private:
 	}
 
 	static void freeLibrary(HandleType handle) {
-		FreeLibrary(handle);
+		if (handle != nullptr) FreeLibrary(handle);
 	}
 
 #else
@@ -78,7 +78,7 @@ private:
 	}
 
 	static void freeLibrary(HandleType handle) {
-		dlclose(handle);
+		if (handle != nullptr) dlclose(handle);
 	}
 
 #endif
