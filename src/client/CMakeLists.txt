@@ -1,12 +1,9 @@
-project(server)
+project(client)
 
 add_definitions(-DNEXWORLD_PLUGIN_API_IMPL)
 add_definitions(-DNEXWORLD_PLUGIN_API_CLIENT)
 
 aux_source_directory(./ SOURCE)
-
-set(INCLUDE ../shared/)
-set(LIB shared)
 
 # Set search paths
 set(DEPS_INCLUDE "" CACHE PATH "The path to depended includes")
@@ -31,13 +28,12 @@ if(UNIX)
     set(DEPS_LIB ${DEPS_LIB} dl)
 endif()
 
-set(INCLUDE ${INCLUDE} ${DEPS_INCLUDE})
-set(LIB ${LIB} ${DEPS_LIB})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BINARY_DIR})
 
 add_library(client SHARED ${SOURCE})
-target_include_directories(client PUBLIC ${INCLUDE})
-target_link_libraries(client ${LIB})
+target_include_directories(client PUBLIC ../shared/ ${DEPS_INCLUDE})
+target_link_libraries(client shared ${DEPS_LIB})
 
-add_executable(NEXWorld ${SOURCE})
-target_include_directories(NEXWorld PUBLIC ${INCLUDE})
-target_link_libraries(NEXWorld ${LIB})
+add_executable(clientexec ../clientexec.cpp)
+target_link_libraries(clientexec client)
