@@ -45,7 +45,7 @@ constexpr const char* ConfigFilename = "Config.ini";
 #if defined(NEXWORLD_TARGET_WINDOWS)
 constexpr const char* DylibSuffix = ".dll";
 #elif defined(NEXWORLD_TARGET_MACOSX)
-constexpr const char* DylibSuffix = ".dylib";
+constexpr const char* DylibSuffix = ".so";
 #elif defined(NEXWORLD_TARGET_LINUX)
 constexpr const char* DylibSuffix = ".so";
 #endif
