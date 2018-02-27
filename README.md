@@ -2,7 +2,8 @@
   
 NEXWorld is a NEWorld implemention, licensed under WTFPL v2!  
 This was created for testing another program structure (different from NEWorld's) for Minecraft-like games...  
-  
+It's also a "Minecraft-one-week-challenge" (https://github.com/Hopson97/MineCraft-One-Week-Challenge) for me, but for some reasons, I may not want to continue development after 7 days... **And the repository is not updating now.**  
+
 ## Compilation
 Dependencies include opengl, glew, sdl2, sdl2-image.  
   
