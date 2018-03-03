@@ -98,11 +98,19 @@ public:
 
 			//drawExampleGUI(win);
 
+			Renderer::checkError();
+
 			// Render update
 			worldRenderer.update();
 
 			// Game update
 			scheduler.refresh();
+			if (scheduler.delta() > 120.0) {
+				std::stringstream ss;
+				ss << "Skipping " << scheduler.delta() << " updates!";
+				LogWarning(ss.str());
+				scheduler.sync();
+			}
 			while (!scheduler.inSync()) {
 				UpdateCounter::increase();
 				player.update(win, world);
