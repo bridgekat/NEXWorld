@@ -73,16 +73,16 @@ namespace GUI {
 
 	private:
 		void renderSelf(const Point2D& ul, const Point2D& lr) override {
-			VertexArray va(6, VertexFormat(0, 4, 0, 2));
-			va.setColor({ 1.0f, 1.0f, 1.0f, 0.7f });
-			va.addVertex({ ul.x, ul.y });
-			va.addVertex({ ul.x, lr.y });
-			va.addVertex({ lr.x, ul.y });
-			va.addVertex({ ul.x, lr.y });
-			va.addVertex({ lr.x, lr.y });
-			va.addVertex({ lr.x, ul.y });
-			VertexBuffer vb(va, false);
-			vb.render();
+			VertexArray va(6, VertexFormat(2, 3, 0, 3));
+			va.setTexture({ 0.0f, 0.0f });
+			va.setColor({ 1.0f, 1.0f, 1.0f });
+			va.addVertex({ ul.x, ul.y, 0.0f });
+			va.addVertex({ ul.x, lr.y, 0.0f });
+			va.addVertex({ lr.x, ul.y, 0.0f });
+			va.addVertex({ ul.x, lr.y, 0.0f });
+			va.addVertex({ lr.x, lr.y, 0.0f });
+			va.addVertex({ lr.x, ul.y, 0.0f });
+			VertexBuffer(va, false).render();
 		}
 	};
 }

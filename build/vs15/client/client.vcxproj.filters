@@ -64,6 +64,12 @@
     <ClCompile Include="..\..\..\src\client\blockrenderer.cpp">
       <Filter>Source Files\WorldRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\client\shader.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\client\opengl.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\client\camera.h">
@@ -101,6 +107,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\client\blockrenderer.h">
       <Filter>Source Files\WorldRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\client\shader.h">
+      <Filter>Source Files\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

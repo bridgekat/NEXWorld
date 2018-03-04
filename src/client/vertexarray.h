@@ -81,7 +81,7 @@ public:
 	// Add vertex
 	void addVertex(const float* coords) {
 		auto cnt = mFormat.textureCount + mFormat.colorCount + mFormat.normalCount;
-		Assert(mVertexes * mFormat.vertexAttributeCount + cnt + 3 <= mMaxVertexes);
+		Assert(mVertexes * mFormat.vertexAttributeCount + cnt + 3 <= mMaxVertexes * mFormat.vertexAttributeCount);
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount, mVertexAttributes, cnt * sizeof(float));
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount + cnt, coords, mFormat.coordinateCount * sizeof(float));
 		mVertexes++;
@@ -118,8 +118,8 @@ private:
 
 class VertexBuffer {
 public:
-	VertexBuffer(): id(0), vertexes(0) {}
-	VertexBuffer(VertexBuffer&& r): id(0), vertexes(0) { swap(r); }
+	VertexBuffer(): id(0), vao(0), vertexes(0) {}
+	VertexBuffer(VertexBuffer&& r): id(0), vao(0), vertexes(0) { swap(r); }
 	/*VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
 		id(id_), vertexes(vertexes_), format(format_) {}*/
 	explicit VertexBuffer(const VertexArray& va, bool staticDraw = true);
@@ -143,6 +143,7 @@ public:
 	// Swap
 	void swap(VertexBuffer& r) {
 		std::swap(id, r.id);
+		std::swap(vao, r.vao);
 		std::swap(vertexes, r.vertexes);
 		std::swap(format, r.format);
 	}
@@ -150,16 +151,20 @@ public:
 	void render() const;
 	// Destroy vertex buffer
 	void destroy() {
-		if (!empty()) {
-			glDeleteBuffersARB(1, &id);
-			vertexes = id = 0;
-		}
 		format = VertexFormat();
+		if (empty()) return;
+		if (!OpenGL::coreProfile()) {
+			glDeleteBuffersARB(1, &id);
+		} else {
+			glDeleteVertexArrays(1, &vao);
+			glDeleteBuffers(1, &id);
+		}
+		vertexes = id = vao = 0;
 	}
 
 private:
 	// Buffer ID
-	VertexBufferID id;
+	VertexBufferID id, vao;
 	// Vertex count
 	int vertexes;
 	// Buffer format

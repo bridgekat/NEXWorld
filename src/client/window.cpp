@@ -5,6 +5,7 @@
 #include <logger.h>
 #include <debug.h>
 #include <common.h>
+#include <config.h>
 
 // OpenGL debug callback
 void GLEWAPIENTRY glDebugCallback(GLenum /*source*/, GLenum /*type*/, GLuint /*id*/, GLenum severity, GLsizei /*length*/, const GLchar* msg, const void* /*data*/) {
@@ -22,9 +23,21 @@ Window::Window(const std::string& title, int width, int height):
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-#ifdef NEXWORLD_DEBUG
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-#endif
+
+	static bool openglDebug = Config::getInt("OpenGL.Debugging", 0) != 0;
+	static bool coreProfile = Config::getInt("OpenGL.CoreProfile", 0) != 0;
+	static bool gles = Config::getInt("OpenGL.ES", 0) != 0;
+	if (gles) coreProfile = true;
+
+	if (openglDebug) SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+	if (coreProfile) {
+		if (gles) SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+		else SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		LogInfo("OpenGL profile: Core/ES");
+	} else {
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+		LogInfo("OpenGL profile: Compatibility");
+	}
 
 	mWindow = SDL_CreateWindow(mTitle.c_str(), 100, 100, mWidth, mHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
@@ -36,19 +49,16 @@ Window::Window(const std::string& title, int width, int height):
 	mContext = SDL_GL_CreateContext(mWindow);
 	makeCurrentDraw();
 
-	if (glewInit() != GLEW_OK) {
-		LogFatal("Failed to initialize GLEW!");
-		Assert(false);
-	}
+	OpenGL::init(coreProfile);
 
 	SDL_GL_SetSwapInterval(0);
 
-#ifdef NEXWORLD_DEBUG
-	if (GLEW_ARB_debug_output) {
-		glDebugMessageCallbackARB(&glDebugCallback, nullptr);
-		LogInfo("GL_ARB_debug_output enabled.");
+	if (openglDebug) {
+		if (GLEW_ARB_debug_output) {
+			glDebugMessageCallbackARB(&glDebugCallback, nullptr);
+			LogInfo("GL_ARB_debug_output enabled.");
+		} else LogWarning("GL_ARB_debug_output not supported, disabling OpenGL debugging.");
 	}
-#endif
 }
 
 Window::~Window() {

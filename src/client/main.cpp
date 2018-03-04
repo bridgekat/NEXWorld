@@ -73,7 +73,6 @@ public:
 
 		Renderer::setClearColor(Vec3f(0.7f, 0.85f, 0.95f));
 		Renderer::enableTexture2D();
-		Renderer::enableAlphaTest();
 		//Renderer::enableBlend();
 
 		win.lockCursor();
@@ -90,6 +89,9 @@ public:
 			Renderer::setViewport(0, 0, win.getWidth(), win.getHeight());
 			Renderer::clear();
 			win.pollEvents();
+
+			Renderer::beginFinalPass();
+
 			player.updateRotation(win);
 			Camera camera = player.getRelativeCamera(float(win.getWidth()), float(win.getHeight()), 1000.0f);
 			Renderer::setProjection(camera.getProjectionMatrix());
@@ -97,6 +99,8 @@ public:
 			size_t renderedChunks = worldRenderer.render(player.interpolatedPosition(interp));
 
 			//drawExampleGUI(win);
+
+			Renderer::endFinalPass();
 
 			Renderer::checkError();
 
@@ -122,9 +126,9 @@ public:
 				worldRenderer.setCenter(playerChunkPos);
 
 				auto loads = worldLoader.getLoadSequence();
-				for (auto& it : loads) world.addChunk(it.second);
+				for (auto& it: loads) world.addChunk(it.second);
 				auto unloads = worldLoader.getUnloadSequence();
-				for (auto& it : unloads) world.deleteChunk(it.second);
+				for (auto& it: unloads) world.deleteChunk(it.second);
 
 				scheduler.increase();
 			}

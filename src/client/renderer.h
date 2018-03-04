@@ -6,11 +6,15 @@
 #include <vec.h>
 #include <mat.h>
 #include "vertexarray.h"
+#include "shader.h"
 
 class Renderer {
 public:
 	// Set up rendering. Must be called after OpenGL context is available!
 	static void init();
+
+	static void beginFinalPass() { mFinal.bind(); }
+	static void endFinalPass() { mFinal.unbind(); }
 
 	static void setViewport(int x, int y, int width, int height) {
 		glViewport(x, y, width, height);
@@ -50,16 +54,19 @@ public:
 		updateMatrices();
 	}
 
-	static void enableTexture2D() { glEnable(GL_TEXTURE_2D); }
-	static void disableTexture2D() { glDisable(GL_TEXTURE_2D); }
+	static void enableTexture2D() {
+		if (!OpenGL::coreProfile()) glEnable(GL_TEXTURE_2D);
+		else glActiveTexture(GL_TEXTURE0);
+	}
+	static void disableTexture2D() {
+		if (!OpenGL::coreProfile()) glDisable(GL_TEXTURE_2D);
+	}
 	static void enableDepthOverwrite() { glDepthFunc(GL_ALWAYS); }
 	static void disableDepthOverwrite() { glDepthFunc(GL_LEQUAL); }
 	static void enableDepthTest() { glEnable(GL_DEPTH_TEST); }
 	static void disableDepthTest() { glDisable(GL_DEPTH_TEST); }
 	static void enableCullFace() { glEnable(GL_CULL_FACE); }
 	static void disableCullFace() { glDisable(GL_CULL_FACE); }
-	static void enableAlphaTest() { glEnable(GL_ALPHA_TEST); }
-	static void disableAlphaTest() { glDisable(GL_ALPHA_TEST); }
 	static void enableBlend() { glEnable(GL_BLEND); }
 	static void disableBlend() { glDisable(GL_BLEND); }
 
@@ -74,12 +81,19 @@ public:
 private:
 	static int matrixMode;
 	static Mat4f mProjection, mModelview;
+	static ShaderProgram mFinal;
 
 	static void updateMatrices() {
-		glMatrixMode(GL_PROJECTION);
-		glLoadMatrixf(mProjection.getTranspose().data);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(mModelview.getTranspose().data);
+		if (!OpenGL::coreProfile()) {
+			glMatrixMode(GL_PROJECTION);
+			glLoadMatrixf(mProjection.getTranspose().data);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadMatrixf(mModelview.getTranspose().data);
+		} else {
+			mFinal.bind();
+			mFinal.setUniformMatrix4fv("ProjectionMatrix", mProjection.getTranspose().data);
+			mFinal.setUniformMatrix4fv("ModelViewMatrix", mModelview.getTranspose().data);
+		}
 	}
 };
 

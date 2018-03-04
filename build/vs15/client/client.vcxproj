@@ -156,8 +156,10 @@
     <ClCompile Include="..\..\..\src\client\clientapi.cpp" />
     <ClCompile Include="..\..\..\src\client\gui.cpp" />
     <ClCompile Include="..\..\..\src\client\main.cpp" />
+    <ClCompile Include="..\..\..\src\client\opengl.cpp" />
     <ClCompile Include="..\..\..\src\client\player.cpp" />
     <ClCompile Include="..\..\..\src\client\renderer.cpp" />
+    <ClCompile Include="..\..\..\src\client\shader.cpp" />
     <ClCompile Include="..\..\..\src\client\texture.cpp" />
     <ClCompile Include="..\..\..\src\client\vertexarray.cpp" />
     <ClCompile Include="..\..\..\src\client\window.cpp" />
@@ -169,6 +171,7 @@
     <ClInclude Include="..\..\..\src\client\camera.h" />
     <ClInclude Include="..\..\..\src\client\chunkrenderer.h" />
     <ClInclude Include="..\..\..\src\client\gui.h" />
+    <ClInclude Include="..\..\..\src\client\shader.h" />
     <ClInclude Include="..\..\..\src\client\texture.h" />
     <ClInclude Include="..\..\..\src\client\opengl.h" />
     <ClInclude Include="..\..\..\src\client\player.h" />
