@@ -23,7 +23,7 @@ public:
 		Assert(textureCount <= 3);
 		Assert(colorCount <= 4);
 		Assert(normalCount == 0 || normalCount == 3);
-		Assert(coordinateCount <= 4 && coordinateCount >= 1);
+		Assert(coordinateCount <= 4 && coordinateCount >= 2);
 	}
 };
 
@@ -81,7 +81,7 @@ public:
 	// Add vertex
 	void addVertex(const float* coords) {
 		auto cnt = mFormat.textureCount + mFormat.colorCount + mFormat.normalCount;
-		Assert(mVertexes * mFormat.vertexAttributeCount + cnt + 3 <= mMaxVertexes * mFormat.vertexAttributeCount);
+		Assert(mVertexes * mFormat.vertexAttributeCount + cnt + mFormat.coordinateCount <= mMaxVertexes * mFormat.vertexAttributeCount);
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount, mVertexAttributes, cnt * sizeof(float));
 		memcpy(mData + mVertexes * mFormat.vertexAttributeCount + cnt, coords, mFormat.coordinateCount * sizeof(float));
 		mVertexes++;
@@ -118,10 +118,10 @@ private:
 
 class VertexBuffer {
 public:
-	VertexBuffer(): id(0), vao(0), vertexes(0) {}
-	VertexBuffer(VertexBuffer&& r): id(0), vao(0), vertexes(0) { swap(r); }
-	/*VertexBuffer(VertexBufferID id_, int vertexes_, const VertexFormat& format_):
-		id(id_), vertexes(vertexes_), format(format_) {}*/
+	VertexBuffer(): mID(0), mVAO(0), mVertexes(0) {}
+	VertexBuffer(VertexBuffer&& r): mID(0), mVAO(0), mVertexes(0) { swap(r); }
+	/*VertexBuffer(VertexBufferID id, int vertexes, const VertexFormat& format):
+		mID(id), mVertexes(vertexes), mFormat(format) {}*/
 	explicit VertexBuffer(const VertexArray& va, bool staticDraw = true);
 	~VertexBuffer() { destroy(); }
 
@@ -132,8 +132,8 @@ public:
 
 	// Is empty
 	bool empty() const {
-		if (id == 0) {
-			Assert(vertexes == 0);
+		if (mID == 0) {
+			Assert(mVertexes == 0);
 			return true;
 		}
 		return false;
@@ -142,33 +142,33 @@ public:
 	void update(const VertexArray& va, bool staticDraw = true);
 	// Swap
 	void swap(VertexBuffer& r) {
-		std::swap(id, r.id);
-		std::swap(vao, r.vao);
-		std::swap(vertexes, r.vertexes);
-		std::swap(format, r.format);
+		std::swap(mID, r.mID);
+		std::swap(mVAO, r.mVAO);
+		std::swap(mVertexes, r.mVertexes);
+		std::swap(mFormat, r.mFormat);
 	}
 	// Render vertex buffer
 	void render() const;
 	// Destroy vertex buffer
 	void destroy() {
-		format = VertexFormat();
+		mFormat = VertexFormat();
 		if (empty()) return;
 		if (!OpenGL::coreProfile()) {
-			glDeleteBuffersARB(1, &id);
+			glDeleteBuffersARB(1, &mID);
 		} else {
-			glDeleteVertexArrays(1, &vao);
-			glDeleteBuffers(1, &id);
+			glDeleteVertexArrays(1, &mVAO);
+			glDeleteBuffers(1, &mID);
 		}
-		vertexes = id = vao = 0;
+		mVertexes = mID = mVAO = 0;
 	}
 
 private:
 	// Buffer ID
-	VertexBufferID id, vao;
+	VertexBufferID mID, mVAO;
 	// Vertex count
-	int vertexes;
+	int mVertexes;
 	// Buffer format
-	VertexFormat format;
+	VertexFormat mFormat;
 };
 
 #endif // !VERTEXARRAY_H_

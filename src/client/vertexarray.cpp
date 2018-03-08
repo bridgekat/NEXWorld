@@ -1,57 +1,57 @@
 #include "vertexarray.h"
 
 void VertexBuffer::update(const VertexArray& va, bool staticDraw) {
-	vertexes = va.vertexCount();
-	format = va.format();
+	mVertexes = va.vertexCount();
+	mFormat = va.format();
 	if (va.vertexCount() == 0) {
-		vertexes = id = 0;
+		mVertexes = mID = 0;
 		return;
 	}
 	if (!OpenGL::coreProfile()) {
-		if (id == 0) glGenBuffersARB(1, &id);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.vertexCount() * sizeof(float) * format.vertexAttributeCount,
+		if (mID == 0) glGenBuffersARB(1, &mID);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, mID);
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, va.vertexCount() * sizeof(float) * mFormat.vertexAttributeCount,
 						va.data(), staticDraw ? GL_STATIC_DRAW_ARB : GL_STREAM_DRAW_ARB);
 	} else {
-		if (id == 0) {
-			Assert(vao == 0);
-			glGenVertexArrays(1, &vao);
-			glGenBuffers(1, &id);
+		if (mID == 0) {
+			Assert(mVAO == 0);
+			glGenVertexArrays(1, &mVAO);
+			glGenBuffers(1, &mID);
 		}
-		glBindVertexArray(vao);
-		glBindBuffer(GL_ARRAY_BUFFER, id);
-		glBufferData(GL_ARRAY_BUFFER, va.vertexCount() * sizeof(float) * format.vertexAttributeCount,
+		glBindVertexArray(mVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, mID);
+		glBufferData(GL_ARRAY_BUFFER, va.vertexCount() * sizeof(float) * mFormat.vertexAttributeCount,
 					 va.data(), staticDraw ? GL_STATIC_DRAW : GL_STREAM_DRAW);
 		int cnt = 0;
-		if (format.textureCount != 0) {
+		if (mFormat.textureCount != 0) {
 			glVertexAttribPointer(
-				cnt, format.textureCount, GL_FLOAT, GL_FALSE,
-				format.vertexAttributeCount * sizeof(float),
+				cnt, mFormat.textureCount, GL_FLOAT, GL_FALSE,
+				mFormat.vertexAttributeCount * sizeof(float),
 				nullptr
 			);
 			glEnableVertexAttribArray(cnt++);
 		}
-		if (format.colorCount != 0) {
+		if (mFormat.colorCount != 0) {
 			glVertexAttribPointer(
-				cnt, format.colorCount, GL_FLOAT, GL_FALSE,
-				format.vertexAttributeCount * sizeof(float),
-				reinterpret_cast<float*>(format.textureCount * sizeof(float))
+				cnt, mFormat.colorCount, GL_FLOAT, GL_FALSE,
+				mFormat.vertexAttributeCount * sizeof(float),
+				reinterpret_cast<float*>(mFormat.textureCount * sizeof(float))
 			);
 			glEnableVertexAttribArray(cnt++);
 		}
-		if (format.normalCount != 0) {
+		if (mFormat.normalCount != 0) {
 			glVertexAttribPointer(
-				cnt, format.normalCount, GL_FLOAT, GL_FALSE,
-				format.vertexAttributeCount * sizeof(float),
-				reinterpret_cast<float*>((format.textureCount + format.colorCount) * sizeof(float))
+				cnt, mFormat.normalCount, GL_FLOAT, GL_FALSE,
+				mFormat.vertexAttributeCount * sizeof(float),
+				reinterpret_cast<float*>((mFormat.textureCount + mFormat.colorCount) * sizeof(float))
 			);
 			glEnableVertexAttribArray(cnt++);
 		}
-		if (format.coordinateCount != 0) {
+		if (mFormat.coordinateCount != 0) {
 			glVertexAttribPointer(
-				cnt, format.coordinateCount, GL_FLOAT, GL_FALSE,
-				format.vertexAttributeCount * sizeof(float),
-				reinterpret_cast<float*>((format.textureCount + format.colorCount + format.normalCount) * sizeof(float))
+				cnt, mFormat.coordinateCount, GL_FLOAT, GL_FALSE,
+				mFormat.vertexAttributeCount * sizeof(float),
+				reinterpret_cast<float*>((mFormat.textureCount + mFormat.colorCount + mFormat.normalCount) * sizeof(float))
 			);
 			glEnableVertexAttribArray(cnt++);
 		}
@@ -61,12 +61,12 @@ void VertexBuffer::update(const VertexArray& va, bool staticDraw) {
 }
 
 VertexBuffer::VertexBuffer(const VertexArray& va, bool staticDraw):
-	vertexes(va.vertexCount()), format(va.format()), id(0), vao(0) {
+	mVertexes(va.vertexCount()), mFormat(va.format()), mID(0), mVAO(0) {
 	update(va, staticDraw);
 }
 
 void VertexBuffer::render() const {
-	if (id == 0) return;
+	if (mID == 0) return;
 
 	if (!OpenGL::coreProfile()) {
 		static bool texCoordArrayEnabled = false;
@@ -74,15 +74,15 @@ void VertexBuffer::render() const {
 		static bool normalArrayEnabled = false;
 		static bool vertexArrayEnabled = false;
 
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, id);
-		if (format.textureCount != 0) {
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, mID);
+		if (mFormat.textureCount != 0) {
 			if (!texCoordArrayEnabled) {
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 				texCoordArrayEnabled = true;
 			}
 			glTexCoordPointer(
-				format.textureCount, GL_FLOAT,
-				format.vertexAttributeCount * sizeof(float),
+				mFormat.textureCount, GL_FLOAT,
+				mFormat.vertexAttributeCount * sizeof(float),
 				nullptr
 			);
 		} else if (texCoordArrayEnabled) {
@@ -90,54 +90,54 @@ void VertexBuffer::render() const {
 			texCoordArrayEnabled = false;
 		}
 
-		if (format.colorCount != 0) {
+		if (mFormat.colorCount != 0) {
 			if (!colorArrayEnabled) {
 				glEnableClientState(GL_COLOR_ARRAY);
 				colorArrayEnabled = true;
 			}
 			glColorPointer(
-				format.colorCount, GL_FLOAT,
-				format.vertexAttributeCount * sizeof(float),
-				reinterpret_cast<float*>(format.textureCount * sizeof(float))
+				mFormat.colorCount, GL_FLOAT,
+				mFormat.vertexAttributeCount * sizeof(float),
+				reinterpret_cast<float*>(mFormat.textureCount * sizeof(float))
 			);
 		} else if (colorArrayEnabled) {
 			glDisableClientState(GL_COLOR_ARRAY);
 			colorArrayEnabled = false;
 		}
 
-		if (format.normalCount != 0) {
+		if (mFormat.normalCount != 0) {
 			if (!normalArrayEnabled) {
 				glEnableClientState(GL_NORMAL_ARRAY);
 				normalArrayEnabled = true;
 			}
 			glNormalPointer(
-				/*format.normalCount,*/ GL_FLOAT,
-				format.vertexAttributeCount * sizeof(float),
-				reinterpret_cast<float*>((format.textureCount + format.colorCount) * sizeof(float))
+				/*mFormat.normalCount,*/ GL_FLOAT,
+				mFormat.vertexAttributeCount * sizeof(float),
+				reinterpret_cast<float*>((mFormat.textureCount + mFormat.colorCount) * sizeof(float))
 			);
 		} else if (normalArrayEnabled) {
 			glDisableClientState(GL_NORMAL_ARRAY);
 			normalArrayEnabled = false;
 		}
 
-		if (format.coordinateCount != 0) {
+		if (mFormat.coordinateCount != 0) {
 			if (!vertexArrayEnabled) {
 				glEnableClientState(GL_VERTEX_ARRAY);
 				vertexArrayEnabled = true;
 			}
 			glVertexPointer(
-				format.coordinateCount, GL_FLOAT,
-				format.vertexAttributeCount * sizeof(float),
-				reinterpret_cast<float*>((format.textureCount + format.colorCount + format.normalCount) * sizeof(float))
+				mFormat.coordinateCount, GL_FLOAT,
+				mFormat.vertexAttributeCount * sizeof(float),
+				reinterpret_cast<float*>((mFormat.textureCount + mFormat.colorCount + mFormat.normalCount) * sizeof(float))
 			);
 		} else if (vertexArrayEnabled) {
 			glDisableClientState(GL_VERTEX_ARRAY);
 			vertexArrayEnabled = false;
 		}
 	} else {
-		glBindVertexArray(vao);
+		glBindVertexArray(mVAO);
 	}
 
 	// 本来这里是有一个装逼的框的（
-	glDrawArrays(GL_TRIANGLES, 0, vertexes);
+	glDrawArrays(GL_TRIANGLES, 0, mVertexes);
 }

@@ -74,7 +74,7 @@ public:
 	static void setClearDepth(float depth) { glClearDepth(depth); }
 
 	static void clear() { glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); }
-	static void flush() { glFlush(); }
+	static void flushCommands() { glFlush(); }
 	static void waitForComplete() { glFinish(); }
 	static void checkError();
 

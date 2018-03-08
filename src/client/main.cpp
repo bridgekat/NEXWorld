@@ -102,6 +102,8 @@ public:
 
 			Renderer::endFinalPass();
 
+			Renderer::flushCommands();
+
 			Renderer::checkError();
 
 			// Render update
